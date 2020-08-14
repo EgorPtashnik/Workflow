@@ -1,0 +1,39 @@
+{
+  "name": "workflow",
+  "version": "1.0.0",
+  "description": "Application for workflow purposes",
+  "main": "index.js",
+  "scripts": {
+    "build:cds": "cds build/all --clean",
+    "deploy:cds": "cds deploy --to sqlite",
+    "start": "node index.js",
+    "start:live": "nodemon index.js --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EgorPtashnik/Workflow.git"
+  },
+  "author": "EgorPtashnik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EgorPtashnik/Workflow/issues"
+  },
+  "homepage": "https://github.com/EgorPtashnik/Workflow#readme",
+  "dependencies": {
+    "@sap/cds": "^4.1.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^2.0.7",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
+    "sqlite3": "^5.0.0"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite"
+      }
+    }
+  }
+}

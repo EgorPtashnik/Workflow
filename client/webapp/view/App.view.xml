@@ -1,0 +1,7 @@
+<mvc:View
+  controllerName='client.controller.App'
+  displayBlock='true'
+  xmlns='sap.m'
+  xmlns:mvc='sap.ui.core.mvc'>
+  <App id='idApp' busy='{state>/busy}'/>
+</mvc:View>

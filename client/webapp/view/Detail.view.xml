@@ -1,0 +1,71 @@
+<mvc:View
+  controllerName='client.controller.Detail'
+  displayBlock='true'
+  xmlns='sap.m'
+  xmlns:c='client.custom'
+  xmlns:dnd='sap.ui.core.dnd'
+  xmlns:mvc='sap.ui.core.mvc'>
+  <Page showHeader='false'>
+     <HBox width='100%'>
+      <VBox  class='sapUiTinyMargin project_list_wrapper'
+        width='300px'>
+        <Title class='sapUiTinyMarginTop sapUiTinyMarginBegin'
+          text='{store>/selectedProject/name}'
+          titleStyle='H2'/>
+        <Text class='sapUiTinyMargin'
+          width='90%' text='{store>/selectedProject/desc}'/>
+      </VBox>
+    </HBox>
+    <OverflowToolbar height='1px'/>
+    <c:FlexBox wrap='wrap' items='{path: "store>/selectedProject/cards", sorter: {path: "createdAt"}}'>
+      <c:firstItem>
+        <VBox>
+          <VBox class='card sapUiTinyMargin' width='15rem' visible='{state>/createCard}'>
+            <Label text='{i18n>newCardName}'/>
+            <Input id='idNewCardNameInput' value='{state>/newCardName}' submit='onCreateCard'/>
+            <Button width='100%' type='Emphasized' text='{i18n>submit}' press='onCreateCard'/>
+            <Button width='100%' type='Reject' text='{i18n>cancel}' press='onHideCreateCardForm'/>
+          </VBox>
+          <VBox width='15rem' height='10.6rem' class='sapUiTinyMargin'
+            justifyContent='Center' alignItems='Center' visible='{=!${state>/createCard}}'>
+            <Button type='Unstyled' icon='sap-icon://add' class='create_card_btn' press='onShowCreateCardForm'/>
+          </VBox>
+        </VBox>
+      </c:firstItem>
+      <c:items>
+        <VBox class='card sapUiTinyMargin'>
+          <c:SimpleButton class='delete_card_btn' press='onDeleteCard'/>
+          <HBox justifyContent='SpaceBetween' class='sapUiTinyMarginTop'>
+            <Title text='{store>name}'/>
+            <ObjectNumber number='{store>items/length}' state='Information'/>
+          </HBox>
+          <Toolbar height='1px' width='100%'/>
+          <Input placeholder='{i18n>newTask}' submit='onCreateTask'/>
+          <List class='sapUiSizeCompact'
+            items='{path: "store>items", templateShareable: "false"}'
+            noDataText='{i18n>noItems}'>
+            <CustomListItem>
+              <VBox class='sapUiTinyMargin task'>
+                <Text text='{store>name}' wrapping='true'/>
+              </VBox>
+            </CustomListItem>
+            <dragDropConfig>
+              <dnd:DragInfo sourceAggregation='items'/>
+              <dnd:DropInfo drop='onDropTask'/>
+            </dragDropConfig>
+          </List>
+        </VBox>
+      </c:items>
+    </c:FlexBox>
+
+    <VBox class='fixed_btn_wrapper_2'>
+      <c:DropButton text='{i18n>delete}'
+        icon='sap-icon://delete'
+        type='Reject'>
+        <c:dragDropConfig>
+          <dnd:DropInfo drop='onDeleteTask' dropEffect='Link'/>
+        </c:dragDropConfig>
+      </c:DropButton>
+    </VBox>
+  </Page>
+</mvc:View>

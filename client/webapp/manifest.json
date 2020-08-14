@@ -1,0 +1,96 @@
+{
+  "_version": "1.12.0",
+  "sap.app": {
+    "id": "client",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.0"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}"
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "rootView": {
+      "viewName": "client.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "idApp"
+    },
+    "dependencies": {
+      "minUI5Version": "1.60.0",
+      "libs": {
+        "sap.ui.core": {},
+        "sap.m": {},
+        "sap.ui.layout": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "client.i18n.i18n"
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "client.view",
+        "controlId": "idApp",
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        {
+          "name": "Home",
+          "pattern": "",
+          "target": "Target_Home"
+        },
+        {
+          "name": "Detail",
+          "pattern": "project/{id}",
+          "target": "Target_Detail"
+        }
+      ],
+      "targets": {
+        "Target_Home": {
+          "viewType": "XML",
+          "viewName": "Home"
+        },
+        "Target_Detail": {
+          "viewType": "XML",
+          "viewName": "Detail"
+        }
+      }
+    }
+  }
+}
