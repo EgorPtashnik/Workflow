@@ -13,7 +13,8 @@ sap.ui.define([
     onInit() {
       this.state = new JSONModel({
         createCard: false,
-        newCardName: ''
+        newCardName: '',
+        editProject: false
       });
       this.setModel(this.state, 'state');
 
@@ -92,6 +93,24 @@ sap.ui.define([
           this.dispatch(A.removeCardTask(sCardItemId, curCardId, this.getStore().getData()));
       })
       .fail(res => MessageBox.error(res.responseJSON.error.message));
+    },
+
+    onGoHome() {
+      this.state.setProperty('/createCard', false);
+      this.state.setProperty('/newCardName', '');
+      this.onNavBack();
+    },
+    onEdit(oEvent) {
+      const bIsPressed = oEvent.getParameter('pressed');
+      if (!bIsPressed) {
+        const sNewProjectName = this.getStore().getProperty('/selectedProject/name');
+        const sNewProjectDesc = this.getStore().getProperty('/selectedProject/desc');
+        HttpService.updateProject(this.sProjectId, {
+          name: sNewProjectName,
+          desc: sNewProjectDesc
+        })
+        .fail(res => MessageBox.error(res.responseJSON.error.message))
+      }
     }
   });
 });

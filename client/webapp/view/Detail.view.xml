@@ -9,12 +9,34 @@
      <HBox width='100%'>
       <VBox  class='sapUiTinyMargin project_list_wrapper'
         width='300px'>
-        <Title class='sapUiTinyMarginTop sapUiTinyMarginBegin'
-          text='{store>/selectedProject/name}'
-          titleStyle='H2'/>
-        <Text class='sapUiTinyMargin'
-          width='90%' text='{store>/selectedProject/desc}'/>
+        <HBox justifyContent='SpaceBetween'>
+          <Title class='sapUiTinyMarginTop sapUiTinyMarginBegin'
+            text='{store>/selectedProject/name}'
+            titleStyle='H2'
+            wrapping='true'
+            visible='{=!${state>/editProject}}'/>
+          <Input class='sapUiTinyMarginBegin'
+            value='{store>/selectedProject/name}'
+            visible='{state>/editProject}'/>
+          <ToggleButton class='sapUiSizeCompact sapUiTinyMarginEnd'
+            icon='sap-icon://edit'
+            type='Transparent'
+            press='onEdit'
+            pressed='{state>/editProject}'/>
+        </HBox>
+        <VBox  class='sapUiTinyMargin'>
+          <Text width='90%'
+            text='{store>/selectedProject/desc}'
+            visible='{=!${state>/editProject}}'/>
+          <Input value='{store>/selectedProject/desc}'
+            visible='{state>/editProject}'/>
+        </VBox>
       </VBox>
+      <Breadcrumbs class='sapUiTinyMarginTop'
+        separatorStyle='GreaterThan'
+        currentLocationText='{store>/selectedProject/name}'>
+        <Link text='Projects' press='onGoHome'/>
+      </Breadcrumbs>
     </HBox>
     <OverflowToolbar height='1px'/>
     <c:FlexBox wrap='wrap' items='{path: "store>/selectedProject/cards", sorter: {path: "createdAt"}}'>

@@ -9,7 +9,9 @@
   <Page floatingFooter='true' showHeader='false'>
 
     <VBox class='sapUiTinyMargin project_list_wrapper'>
-      <List items='{store>/projects}'
+      <List items='{
+        path: "store>/projects",
+        sorter: {path: "createdAt"}}'
         noDataText='{i18n>noProjects}'>
         <headerToolbar>
           <OverflowToolbar>

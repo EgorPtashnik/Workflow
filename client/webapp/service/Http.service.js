@@ -17,6 +17,13 @@ sap.ui.define([
         contentType: 'application/json',
       });
     },
+    updateProject(sProjectId, oProject) {
+      return $.ajax(ROUTES.SERVER.PROJECTS + `/${sProjectId}`, {
+        method: 'PUT',
+        data: JSON.stringify(oProject),
+        contentType: 'application/json'
+      });
+    },
     deleteProject(sProjectId) {
       return $.ajax(ROUTES.SERVER.PROJECTS + `/${sProjectId}`, {
         method: 'DELETE'
