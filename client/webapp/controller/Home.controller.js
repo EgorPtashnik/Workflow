@@ -30,9 +30,14 @@ sap.ui.define([
     _onRouteMatched(oEvent) {
       if (oEvent.getParameter('name') !== ROUTES.HOME) return;
 
+      if (window.localStorage.getItem('projects')) this.dispatch(A.setProjects(JSON.parse(window.localStorage.getItem('projects'))))
+      else
       HttpService.getProjects()
-        .done(oData => this.dispatch(A.setProjects(oData.value)))
-        .fail(err => MessageBox.error(err.message));
+        .done(oData => {
+          window.localStorage.setItem('projects', JSON.stringify(oData.value));
+          this.dispatch(A.setProjects(oData.value));
+        })
+        .fail(err => this.showErrorMessage(err.message));
     },
     onPressCreate() {
       this.state.setProperty('/showFooter', true);
@@ -46,11 +51,12 @@ sap.ui.define([
       const sNewProjectName = this.state.getProperty('/newProjectName');
       const sNewProjectDesc = this.state.getProperty('/newProjectDesc');
       if (!sNewProjectName || !sNewProjectDesc) {
-        MessageBox.error(this.getResourceBundle().getText('createError'));
+        this.showErrorMessage(this.getResourceBundle().getText('createProjectError'));
         return;
       };
       HttpService.createProject({ name: sNewProjectName, desc: sNewProjectDesc })
         .done(oData => {
+          this.showSuccessMessage(this.getResourceBundle().getText('createProjectSuccess'));
           this.dispatch(A.addProject({...oData}, this.getStore().getData()));
           this.state.setProperty('/newProjectName', '');
           this.state.setProperty('/newProjectDesc', '');
@@ -70,13 +76,9 @@ sap.ui.define([
       HttpService.deleteProject(ID)
         .done(() => {
           this.dispatch(A.removeProject(ID, this.getStore().getData()));
-          MessageToast.show(this.getResourceBundle().getText('successDelete'), {
-            my: 'right top',
-            at: 'right top',
-            offset: '-10 10'
-          })
+          this.showSuccessMessage(this.getResourceBundle().getText('deleteProjectSuccess'));
         })
-        .fail(res => MessageBox.error(res.responseJSON.error.message));
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message));
     },
 
     onGoToProject(oEvent) {
