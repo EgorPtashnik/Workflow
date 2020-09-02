@@ -17,7 +17,8 @@ sap.ui.define([
         showFooter: false,
         newProjectName: '',
         newProjectDesc: '',
-        projectNameFilter: ''
+        projectNameFilter: '',
+        deleteMode: false
       });
       this.setModel(this.state, 'state');
 
@@ -64,15 +65,15 @@ sap.ui.define([
     },
 
     onDelete(oEvent) {
-      const oProjectListItem = oEvent.getParameter('draggedControl');
+      const oProjectListItem = oEvent.getParameter('listItem');
       const { ID } = oProjectListItem.getBindingContext('store').getObject();
       HttpService.deleteProject(ID)
         .done(() => {
           this.dispatch(A.removeProject(ID, this.getStore().getData()));
           MessageToast.show(this.getResourceBundle().getText('successDelete'), {
-            my: 'right bottom',
-            at: 'right bottom',
-            offset: '-10 -60'
+            my: 'right top',
+            at: 'right top',
+            offset: '-10 10'
           })
         })
         .fail(res => MessageBox.error(res.responseJSON.error.message));

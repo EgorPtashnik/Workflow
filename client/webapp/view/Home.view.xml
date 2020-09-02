@@ -12,13 +12,16 @@
       <List items='{
         path: "store>/projects",
         sorter: {path: "createdAt"}}'
-        noDataText='{i18n>noProjects}'>
+        noDataText='{i18n>noProjects}'
+        delete='onDelete'
+        mode='{=${state>/deleteMode}? "Delete" : "None"}'>
         <headerToolbar>
           <OverflowToolbar>
-            <Title text='{i18n>projects}'/>
+            <Title text='{i18n>projects}: {store>/projects/length}'/>
             <ToolbarSpacer/>
             <SearchField width='15rem' value='{state>/projectNameFilter}'/>
-            <Button icon='sap-icon://add'
+            <ToggleButton pressed='{state>/deleteMode}' type='Reject' icon='sap-icon://delete'/>
+            <Button type='Ghost' icon='sap-icon://add'
               tooltip='{i18n>createNewProject}'
               press='onPressCreate'/>
           </OverflowToolbar>
@@ -37,21 +40,7 @@
             </VBox>
           </HBox>
         </CustomListItem>
-
-        <dragDropConfig>
-          <dnd:DragInfo sourceAggregation='items'/>
-        </dragDropConfig>
       </List>
-    </VBox>
-
-    <VBox class='fixed_btn_wrapper'>
-      <c:DropButton text='{i18n>delete}'
-        icon='sap-icon://delete'
-        type='Reject'>
-        <c:dragDropConfig>
-          <dnd:DropInfo drop='onDelete' dropEffect='Link'/>
-        </c:dragDropConfig>
-      </c:DropButton>
     </VBox>
 
     <footer>
@@ -66,7 +55,7 @@
           submit='onPressSubmit'
           placeholder='{i18n>newProjectDesc}'/>
         <Button type='Emphasized' text='{i18n>submit}' press='onPressSubmit'/>
-          <Button type='Reject' text='{i18n>cancel}' press='onPressCancel'/>
+        <Button type='Reject' text='{i18n>cancel}' press='onPressCancel'/>
       </Toolbar>
     </footer>
   </Page>

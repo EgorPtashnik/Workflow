@@ -3,5 +3,7 @@
   displayBlock='true'
   xmlns='sap.m'
   xmlns:mvc='sap.ui.core.mvc'>
-  <App id='idApp' busy='{state>/busy}'/>
+  <Shell>
+    <App id='idApp' busy='{state>/busy}'/>
+  </Shell>
 </mvc:View>

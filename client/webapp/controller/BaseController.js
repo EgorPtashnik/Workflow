@@ -13,27 +13,21 @@ sap.ui.define([
     dispatch(oNewData) {
       this.getStore().dispatch(oNewData);
     },
-
     getModel(sName) {
       return this.getView().getModel(sName);
     },
-
     setModel(oModel, sName) {
       return this.getView().setModel(oModel, sName);
     },
-
     getResourceBundle() {
       return this.getOwnerComponent().getModel("i18n").getResourceBundle();
     },
-
     navTo(psTarget, pmParameters, pbReplace) {
       this.getRouter().navTo(psTarget, pmParameters, pbReplace);
     },
-
     getRouter() {
       return UIComponent.getRouterFor(this);
     },
-
     onNavBack() {
       var sPreviousHash = History.getInstance().getPreviousHash();
 
