@@ -1,18 +1,28 @@
-.project_list_wrapper {
+.list_wrapper {
   background-color: white;
   border: 1px solid rgba(0,0,0,0.3);
+  border-top-left-radius: 10px;
 }
-.fixed_btn_wrapper {
-  position: fixed;
-  right: 1rem;
-  bottom: 0.5rem;
+.task_wrapper {
+  min-width: 300px;
+  width: 300px;
+  border-left: 1px solid rgba(0,0,0,0.3);
+  border-top: 1px solid rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(0,0,0,0.3);
 }
-.fixed_btn_wrapper_2 {
-  position: fixed;
-  right: 1rem;
-  top: 0.5rem;
+.task_wrapper:last-child {
+  border-right: 1px solid rgba(0,0,0,0.3);
 }
-
+.task_wrapper_title {
+  border-bottom: 2px solid black;
+  background-color: ghostwhite;
+}
+.task {
+  background-color: white;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  width: 100%;
+  height: 80px;
+}
 .card {
   background-color: white;
   border: 1px solid rgba(0,0,0,0.3);
@@ -50,11 +60,6 @@
 }
 .delete_card_btn:hover {
   cursor: pointer;
-}
-.task {
-  background-color: rgb(229, 243, 230);
-  border-radius: 2px;
-  padding: 5px;
 }
 
 .scale_in {

@@ -12,9 +12,9 @@ sap.ui.define([
   return BaseController.extend('client.controller.Detail', {
     onInit() {
       this.state = new JSONModel({
-        createCard: false,
+        showNewCardInput: false,
         newCardName: '',
-        editProject: false
+        editMode: false
       });
       this.setModel(this.state, 'state');
 
@@ -26,91 +26,111 @@ sap.ui.define([
 
       HttpService.getProject(this.sProjectId)
         .done(oData => this.dispatch(A.setSelectedProject(oData)))
-        .fail(res => {
-          MessageBox.error(res.responseJSON.error.message, {
-            onClose: () => this.navTo(ROUTES.HOME)
-          });
-      })
+        .fail(res => MessageBox.error(res.responseJSON.error.message, { onClose: () => this.navTo(ROUTES.HOME)}));
     },
-    onCreateTask(oEvent) {
-      const oInput = oEvent.getSource();
-      const sNewTaskName = oInput.getValue();
-      if (!sNewTaskName) return;
-      const sCardId = oInput.getParent().getBindingContext('store').getObject().ID;
-      HttpService.createCardItem({ name: sNewTaskName, card_ID: sCardId })
-        .done(oData => {
-          this.dispatch(A.addCardTask(sCardId, oData, this.getStore().getData()));
-          oInput.setValue('');
-        })
-        .fail(res => MessageBox.error(res.responseJSON.error.message))
+    closeDialog(oEvent) {
+      oEvent.getSource().getParent().close();
     },
-    onDeleteTask(oEvent) {
-      const { ID } = oEvent.getParameter('draggedControl').getBindingContext('store').getObject();
-      const sCardId = oEvent.getParameter('draggedControl').getParent().getParent().getBindingContext('store').getObject().ID;
-      HttpService.deleteCardItem(ID)
-        .done(() => this.dispatch(A.removeCardTask(ID, sCardId, this.getStore().getData())))
-        .fail(res => MessageBox.error(res.responseJSON.error.message))
+    openCreateCardDialog() {
+      if (!this.createCardDialog) this.createCardDialog = this.byId('idCreateCardDialog');
+      this.createCardDialog.open();
     },
-    onShowCreateCardForm() {
-      this.state.setProperty('/createCard', true);
-      setTimeout(() => this.byId('idNewCardNameInput').focus(), 100);
+    openEditProjectDialog() {
+      if (!this.editProjectDialog) this.editProjectDialog = this.byId('idEditProjectDialog');
+      this.editProjectDialog.open();
     },
-    onHideCreateCardForm() {
-      this.state.setProperty('/newCardName', '');
-      this.state.setProperty('/createCard', false);
-    },
-    onCreateCard() {
+    onCreateCard(oEvent) {
       const sNewCardName = this.state.getProperty('/newCardName');
+      this.state.setProperty('/newCardName');
       if (!sNewCardName) {
-        MessageBox.error(this.getResourceBundle().getText('cardNameError'));
+        this.showErrorMessage(this.getResourceBundle().getText('cardNameError'));
         return;
       }
       HttpService.createCard({ name: sNewCardName, project_ID: this.sProjectId })
         .done(oData => {
+          this.showSuccessMessage(this.getResourceBundle().getText('createItemSuccess'));
           this.dispatch(A.addCard(oData, this.getStore().getData()));
-          this.onHideCreateCardForm();
+          this.createCardDialog.close();
         })
-        .fail(res => MessageBox.error(res.responseJSON.error.message));
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message));
+    },
+    onChangeListMode(oEvent) {
+      const bPressed = oEvent.getParameter('pressed');
+      oEvent.getSource().getParent().getParent().setMode(bPressed? 'Delete' : 'SingleSelectMaster');
+    },
+    onCreateTask(oEvent, sCardID) {
+      const oInput = oEvent.getSource();
+      const sNewTaskName = oInput.getValue();
+      if (!sNewTaskName) return;
+      HttpService.createCardItem({ name: sNewTaskName, card_ID: sCardID, done: 0 })
+        .done(oData => {
+          this.showSuccessMessage(this.getResourceBundle().getText('createItemSuccess'));
+          this.dispatch(A.addCardTask(sCardID, oData, this.getStore().getData()));
+          oInput.setValue('');
+        })
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
+    },
+    onDeleteTask(oEvent) {
+      const { ID, card_ID } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
+      HttpService.deleteCardItem(ID)
+        .done(() => {
+          this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));
+          this.dispatch(A.removeCardTask(ID, card_ID, this.getStore().getData()));
+        })
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message));
+    },
+    onChangeListItemStatus(oEvent) {
+      let { ID, done } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
+      done = done === 0? 1 : 0;
+      HttpService.updateCardItem(ID, { done: done })
+        .done(oData => {
+          this.showSuccessMessage(this.getResourceBundle().getText('updateItemSuccess'));
+          this.dispatch(A.updateCardTask(ID, oData ,this.getStore().getData()));
+          })
+          .fail(res => this.showErrorMessage(res,responseJSON,error,message));
     },
     onDeleteCard(oEvent) {
-      const { ID } = oEvent.getSource().getParent().getBindingContext('store').getObject();
+      const { ID } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
       HttpService.deleteCard(ID)
-        .done(() => this.dispatch(A.deleteCard(ID, this.getStore().getData())))
-        .fail(res => MessageBox.error(res.responseJSON.error.message))
-    },
-
-    onDropTask(oEvent) {
-      let sCardId;
-      const oDraggedCardItemData = oEvent.getParameter('draggedControl').getBindingContext('store').getObject();
-      const oDroppedCardData = oEvent.getParameter('droppedControl').getBindingContext('store').getObject();
-      const curCardId = oDraggedCardItemData.card_ID;
-      if (oDroppedCardData.ID === curCardId) return;
-      sCardId = oDroppedCardData.ID;
-      const sCardItemId = oDraggedCardItemData.ID;
-      HttpService.updateCardItem(sCardItemId, { card_ID: sCardId })
-      .done(oData => {
-          this.dispatch(A.addCardTask(sCardId, oData, this.getStore().getData()));
-          this.dispatch(A.removeCardTask(sCardItemId, curCardId, this.getStore().getData()));
-      })
-      .fail(res => MessageBox.error(res.responseJSON.error.message));
-    },
-
-    onGoHome() {
-      this.state.setProperty('/createCard', false);
-      this.state.setProperty('/newCardName', '');
-      this.onNavBack();
-    },
-    onEdit(oEvent) {
-      const bIsPressed = oEvent.getParameter('pressed');
-      if (!bIsPressed) {
-        const sNewProjectName = this.getStore().getProperty('/selectedProject/name');
-        const sNewProjectDesc = this.getStore().getProperty('/selectedProject/desc');
-        HttpService.updateProject(this.sProjectId, {
-          name: sNewProjectName,
-          desc: sNewProjectDesc
+        .done(() => {
+          this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));
+          this.dispatch(A.deleteCard(ID, this.getStore().getData()))
         })
-        .fail(res => MessageBox.error(res.responseJSON.error.message))
-      }
-    }
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
+    },
+
+    // onDropTask(oEvent) {
+    //   let sCardId;
+    //   const oDraggedCardItemData = oEvent.getParameter('draggedControl').getBindingContext('store').getObject();
+    //   const oDroppedCardData = oEvent.getParameter('droppedControl').getBindingContext('store').getObject();
+    //   const curCardId = oDraggedCardItemData.card_ID;
+    //   if (oDroppedCardData.ID === curCardId) return;
+    //   sCardId = oDroppedCardData.ID;
+    //   const sCardItemId = oDraggedCardItemData.ID;
+    //   HttpService.updateCardItem(sCardItemId, { card_ID: sCardId })
+    //   .done(oData => {
+    //       this.dispatch(A.addCardTask(sCardId, oData, this.getStore().getData()));
+    //       this.dispatch(A.removeCardTask(sCardItemId, curCardId, this.getStore().getData()));
+    //   })
+    //   .fail(res => MessageBox.error(res.responseJSON.error.message));
+    // },
+
+    // onGoHome() {
+    //   this.state.setProperty('/createCard', false);
+    //   this.state.setProperty('/newCardName', '');
+    //   this.onNavBack();
+    // },
+    // onEdit(oEvent) {
+    //   const bIsPressed = oEvent.getParameter('pressed');
+    //   if (!bIsPressed) {
+    //     const sNewProjectName = this.getStore().getProperty('/selectedProject/name');
+    //     const sNewProjectDesc = this.getStore().getProperty('/selectedProject/desc');
+    //     HttpService.updateProject(this.sProjectId, {
+    //       name: sNewProjectName,
+    //       desc: sNewProjectDesc
+    //     })
+    //     .fail(res => MessageBox.error(res.responseJSON.error.message))
+      // }
+    // }
   });
 });

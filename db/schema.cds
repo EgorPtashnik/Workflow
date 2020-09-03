@@ -18,5 +18,6 @@ entity Card: cuid, managed {
 
 entity CardItem: cuid {
   name: String;
+  done: Integer;
   card: Association to Card;
 }

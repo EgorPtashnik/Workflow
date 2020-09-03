@@ -1,17 +1,11 @@
-<mvc:View
-  controllerName='client.controller.Home'
-  displayBlock='true'
-  xmlns:dnd='sap.ui.core.dnd'
+<mvc:View controllerName='client.controller.Home' displayBlock='true'
   xmlns:core='sap.ui.core'
-  xmlns:c='client.custom'
   xmlns='sap.m'
   xmlns:mvc='sap.ui.core.mvc'>
   <Page floatingFooter='true' showHeader='false'>
 
-    <VBox class='sapUiTinyMargin project_list_wrapper'>
-      <List items='{
-        path: "store>/projects",
-        sorter: {path: "createdAt"}}'
+    <VBox class='sapUiTinyMargin list_wrapper'>
+      <List items='{ path: "store>/projects", sorter: { path: "createdAt" } }'
         noDataText='{i18n>noProjects}'
         delete='onDelete'
         mode='{=${state>/deleteMode}? "Delete" : "None"}'>
@@ -19,21 +13,16 @@
           <OverflowToolbar>
             <Title text='{i18n>projects}: {store>/projects/length}'/>
             <ToolbarSpacer/>
-            <SearchField width='15rem' value='{state>/projectNameFilter}'/>
+            <ComboBox placeholder='{i18n>search}' items='{store>/projects}' width='15rem' value='{state>/projectNameFilter}'>
+              <core:Item text='{store>name}'/>
+            </ComboBox>
             <ToggleButton pressed='{state>/deleteMode}' type='Reject' icon='sap-icon://delete'/>
-            <Button type='Ghost' icon='sap-icon://add'
-              tooltip='{i18n>createNewProject}'
-              press='onPressCreate'/>
+            <Button type='Ghost' icon='sap-icon://add' tooltip='{i18n>createNewProject}' press='onPressCreate'/>
           </OverflowToolbar>
         </headerToolbar>
-        <CustomListItem type='Navigation'
-          press='onGoToProject'
-          visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
-          <HBox  class='sapUiTinyMargin'
-            alignItems='Center'>
-            <core:Icon class='sapUiTinyMarginEnd'
-              size='2rem'
-              src='sap-icon://responsive'/>
+        <CustomListItem type='Navigation' press='onGoToProject' visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
+          <HBox class='sapUiTinyMargin' alignItems='Center'>
+            <core:Icon class='sapUiTinyMarginEnd' size='2rem' src='sap-icon://responsive'/>
             <VBox>
               <Title text='{store>name}'/>
               <Text text='{store>desc}'/>
@@ -44,16 +33,9 @@
     </VBox>
 
     <footer>
-      <Toolbar id='idFooter'
-        class='scale_out'
-        visible='{state>/showFooter}'>
-        <Input id='idProjectInput'
-          submit='onPressSubmit'
-          value='{state>/newProjectName}'
-          placeholder='{i18n>newProjectName}'/>
-        <Input value='{state>/newProjectDesc}'
-          submit='onPressSubmit'
-          placeholder='{i18n>newProjectDesc}'/>
+      <Toolbar id='idFooter' class='scale_out' visible='{state>/showFooter}'>
+        <Input id='idProjectInput' submit='onPressSubmit' value='{state>/newProjectName}' placeholder='{i18n>newProjectName}'/>
+        <Input value='{state>/newProjectDesc}' submit='onPressSubmit' placeholder='{i18n>newProjectDesc}'/>
         <Button type='Emphasized' text='{i18n>submit}' press='onPressSubmit'/>
         <Button type='Reject' text='{i18n>cancel}' press='onPressCancel'/>
       </Toolbar>

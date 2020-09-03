@@ -44,6 +44,17 @@ sap.ui.define([
           return arr;
         }, [])
       }};
+    },
+    updateCardTask(sCardItemId, oNewCardItem, store) {
+      return { selectedProject: {
+        ...store.selectedProject,
+        cards: store.selectedProject.cards.reduce((arr, item) => {
+          if (item.ID === oNewCardItem.card_ID)
+            item.items = item.items.map(cardItem => cardItem.ID === sCardItemId? oNewCardItem : cardItem);
+          arr.push(item);
+          return arr;
+        }, [])
+      }}
     }
   }
 })

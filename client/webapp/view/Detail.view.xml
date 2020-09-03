@@ -1,93 +1,65 @@
 <mvc:View
   controllerName='client.controller.Detail'
   displayBlock='true'
-  xmlns='sap.m'
-  xmlns:c='client.custom'
-  xmlns:dnd='sap.ui.core.dnd'
+  xmlns:m='sap.m'
+  xmlns='sap.uxap'
   xmlns:mvc='sap.ui.core.mvc'>
-  <Page showHeader='false'>
-     <HBox width='100%'>
-      <VBox  class='sapUiTinyMargin project_list_wrapper'
-        width='300px'>
-        <HBox justifyContent='SpaceBetween'>
-          <Title class='sapUiTinyMarginTop sapUiTinyMarginBegin'
-            text='{store>/selectedProject/name}'
-            titleStyle='H2'
-            wrapping='true'
-            visible='{=!${state>/editProject}}'/>
-          <Input class='sapUiTinyMarginBegin'
-            value='{store>/selectedProject/name}'
-            visible='{state>/editProject}'/>
-          <ToggleButton class='sapUiSizeCompact sapUiTinyMarginEnd'
-            icon='sap-icon://edit'
-            type='Transparent'
-            press='onEdit'
-            pressed='{state>/editProject}'/>
-        </HBox>
-        <VBox  class='sapUiTinyMargin'>
-          <Text width='90%'
-            text='{store>/selectedProject/desc}'
-            visible='{=!${state>/editProject}}'/>
-          <Input value='{store>/selectedProject/desc}'
-            visible='{state>/editProject}'/>
-        </VBox>
-      </VBox>
-      <Breadcrumbs class='sapUiTinyMarginTop'
-        separatorStyle='GreaterThan'
-        currentLocationText='{store>/selectedProject/name}'>
-        <Link text='Projects' press='onGoHome'/>
-      </Breadcrumbs>
-    </HBox>
-    <OverflowToolbar height='1px'/>
-    <c:FlexBox wrap='wrap' items='{path: "store>/selectedProject/cards", sorter: {path: "createdAt"}}'>
-      <c:firstItem>
-        <VBox>
-          <VBox class='card sapUiTinyMargin' width='15rem' visible='{state>/createCard}'>
-            <Label text='{i18n>newCardName}'/>
-            <Input id='idNewCardNameInput' value='{state>/newCardName}' submit='onCreateCard'/>
-            <Button width='100%' type='Emphasized' text='{i18n>submit}' press='onCreateCard'/>
-            <Button width='100%' type='Reject' text='{i18n>cancel}' press='onHideCreateCardForm'/>
-          </VBox>
-          <VBox width='15rem' height='10.6rem' class='sapUiTinyMargin'
-            justifyContent='Center' alignItems='Center' visible='{=!${state>/createCard}}'>
-            <Button type='Unstyled' icon='sap-icon://add' class='create_card_btn' press='onShowCreateCardForm'/>
-          </VBox>
-        </VBox>
-      </c:firstItem>
-      <c:items>
-        <VBox class='card sapUiTinyMargin'>
-          <c:SimpleButton class='delete_card_btn' press='onDeleteCard'/>
-          <HBox justifyContent='SpaceBetween' class='sapUiTinyMarginTop'>
-            <Title text='{store>name}'/>
-            <ObjectNumber number='{store>items/length}' state='Information'/>
-          </HBox>
-          <Toolbar height='1px' width='100%'/>
-          <Input placeholder='{i18n>newTask}' submit='onCreateTask'/>
-          <List class='sapUiSizeCompact'
-            items='{path: "store>items", templateShareable: "false"}'
-            noDataText='{i18n>noItems}'>
-            <CustomListItem>
-              <VBox class='sapUiTinyMargin task'>
-                <Text text='{store>name}' wrapping='true'/>
-              </VBox>
-            </CustomListItem>
-            <dragDropConfig>
-              <dnd:DragInfo sourceAggregation='items'/>
-              <dnd:DropInfo drop='onDropTask'/>
-            </dragDropConfig>
-          </List>
-        </VBox>
-      </c:items>
-    </c:FlexBox>
+  <ObjectPageLayout showTitleInHeaderContent='true' sections='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" }}'>
+    <headerTitle>
+      <ObjectPageHeader objectTitle='{store>/selectedProject/name}'
+        objectSubtitle='{store>/selectedProject/desc}'
+        objectImageURI='resources/img/project.jpg'>
+        <ObjectPageHeaderActionButton type='Emphasized' press='openCreateCardDialog' hideText='false' hideIcon='true' text='{i18n>createNewCard}'/>
+        <ObjectPageHeaderActionButton hideText='false' hideIcon='true' text='{i18n>edit}' press='openEditProjectDialog'/>
+      </ObjectPageHeader>
+    </headerTitle>
 
-    <VBox class='fixed_btn_wrapper_2'>
-      <c:DropButton text='{i18n>delete}'
-        icon='sap-icon://delete'
-        type='Reject'>
-        <c:dragDropConfig>
-          <dnd:DropInfo drop='onDeleteTask' dropEffect='Link'/>
-        </c:dragDropConfig>
-      </c:DropButton>
-    </VBox>
-  </Page>
+    <sections>
+      <ObjectPageSection titleUppercase='false' title='{store>name}'>
+        <ObjectPageSubSection>
+          <m:VBox class='list_wrapper'>
+            <m:List noDataText='{i18n>noTasks}' itemPress='onChangeListItemStatus' delete='onDeleteTask' items='{path: "store>items", templateShareable: "false"}'>
+              <m:headerToolbar>
+                <m:Toolbar>
+                  <m:Title text='{store>name}'/>
+                  <m:ToolbarSpacer/>
+                  <m:Input width='300px' placeholder='{i18n>newTask}' submit='onCreateTask($event, ${store>ID})'/>
+                  <m:ToggleButton icon='sap-icon://delete' press='onChangeListMode'/>
+                </m:Toolbar>
+              </m:headerToolbar>
+              <m:StandardListItem type='Active' title='{store>name}' highlight='{=${store>done} === 0? "Error" : "Success"}'
+                info='{=${store>done} === 0? "In Progress" : "Done"}' infoState='{=${store>done} === 0? "Error" : "Success"}'/>
+            </m:List>
+          </m:VBox>
+        </ObjectPageSubSection>
+      </ObjectPageSection>
+    </sections>
+  </ObjectPageLayout>
+
+  <m:Dialog title='{i18n>createNewCard}' id='idCreateCardDialog'>
+    <m:VBox class='sapUiTinyMargin'>
+      <m:Label text='{i18n>newCardName}'/>
+      <m:Input value='{state>/newCardName}' submit='onCreateCard'/>
+    </m:VBox>
+    <m:buttons>
+      <m:Button type='Emphasized' press='onCreateCard' text='{i18n>submit}'/>
+      <m:Button type='Transparent' text='{i18n>cancel}' press='closeDialog'/>
+    </m:buttons>
+  </m:Dialog>
+
+  <m:Dialog title='{i18n>editProject}' id='idEditProjectDialog'>
+    <m:VBox class='sapUiTinyMargin'>
+      <m:Label text='{i18n>projectName}:'/>
+      <m:Input value='{store>/selectedProject/name}'/>
+      <m:Label text='{i18n>projectDesc}'/>
+      <m:TextArea growing='true' width='100%' value='{store>/selectedProject/desc}'/>
+      <m:List noDataText='{i18n>noCards}' mode='Delete' delete='onDeleteCard' items='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" } }'>
+        <m:StandardListItem title="{store>name}" info="{store>items/length} items" infoState="Info"/>
+      </m:List>
+    </m:VBox>
+    <m:buttons>
+      <m:Button type='Emphasized' text='{i18n>submit}' press='onUpdateProject'/>
+      <m:Button type='Transparent' text='{i18n>close}' press='closeDialog'/>
+    </m:buttons>
+  </m:Dialog>
 </mvc:View>

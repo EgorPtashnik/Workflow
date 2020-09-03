@@ -1,12 +1,10 @@
 sap.ui.define([
   'client/controller/BaseController',
-  'sap/m/MessageToast',
-  'sap/m/MessageBox',
   'sap/ui/model/json/JSONModel',
   'client/constant/Routes',
   'client/service/Http.service',
   'client/model/actions'
-], function(BaseController, MessageToast, MessageBox, JSONModel,
+], function(BaseController, JSONModel,
             ROUTES, HttpService, A) {
   "use strict";
 
@@ -62,7 +60,7 @@ sap.ui.define([
           this.state.setProperty('/newProjectDesc', '');
           this.onPressCancel();
         })
-        .fail(oData => MessageBox.error(oData.responseJSON.error.message))
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
     onPressCancel() {
       this.oFooter.addStyleClass('scale_out');
