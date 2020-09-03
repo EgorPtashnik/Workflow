@@ -6,7 +6,7 @@
   "scripts": {
     "build:cds": "cds build/all --clean",
     "deploy:cds": "cds deploy --to sqlite",
-    "start": "node index.js",
+    "start": "npm run deploy:cds && node index.js",
     "start:live": "nodemon index.js --open"
   },
   "repository": {
