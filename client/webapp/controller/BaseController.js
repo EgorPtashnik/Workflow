@@ -5,9 +5,10 @@ sap.ui.define([
   'sap/base/Log',
   'sap/m/MessageBox',
   'sap/m/MessageToast',
-  'client/constant/Routes'
+  'client/constant/Routes',
+  'client/model/actions'
 ], function(Controller, History, UIComponent, Log, MessageBox, MessageToast,
-            ROUTES) {
+            ROUTES, A) {
   "use strict";
 
   return Controller.extend("client.controller.BaseController", {
