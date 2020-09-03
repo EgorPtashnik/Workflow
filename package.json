@@ -6,7 +6,7 @@
   "scripts": {
     "build:cds": "cds build/all --clean",
     "deploy:cds": "cds deploy --to sqlite",
-    "start": "npm run deploy:cds && node index.js",
+    "start": "node index.js",
     "start:live": "nodemon index.js --open"
   },
   "repository": {
@@ -26,7 +26,6 @@
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {
-    "@sap/cds-dk": "^2.0.7",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5"
   },
