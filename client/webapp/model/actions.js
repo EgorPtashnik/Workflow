@@ -7,6 +7,9 @@ sap.ui.define([
     setProjects(aProjects, store) {
       return { projects: aProjects }
     },
+    toggleBusy(bBusy) {
+      return { busy: bBusy};
+    },
     addProject(oProject, store) {
       store.projects.push(oProject);
       return { projects: store.projects.map(oProject => oProject)};

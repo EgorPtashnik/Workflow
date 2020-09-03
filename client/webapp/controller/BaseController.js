@@ -51,6 +51,9 @@ sap.ui.define([
     showErrorMessage(sMessage) {
       MessageBox.error(sMessage);
       this.getLogger().error(sMessage);
+    },
+    toggleBusy(bBusy) {
+      this.dispatch(A.toggleBusy(bBusy));
     }
 
   });

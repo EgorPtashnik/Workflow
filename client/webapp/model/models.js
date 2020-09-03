@@ -16,6 +16,7 @@ sap.ui.define([
       const oStore = new Store({
         projects: [],
         cards: [],
+        busy: false,
         cardItems: [],
         selectedProject: {}
       });

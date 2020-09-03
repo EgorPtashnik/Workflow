@@ -4,6 +4,6 @@
   xmlns='sap.m'
   xmlns:mvc='sap.ui.core.mvc'>
   <Shell backgroundColor='#004ba8'>
-    <App id='idApp' busy='{state>/busy}'/>
+    <App id='idApp' busy='{store>/busy}'/>
   </Shell>
 </mvc:View>

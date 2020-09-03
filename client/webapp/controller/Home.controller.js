@@ -27,6 +27,7 @@ sap.ui.define([
 
     _onRouteMatched(oEvent) {
       if (oEvent.getParameter('name') !== ROUTES.HOME) return;
+      this.toggleBusy(true);
 
       if (!this.getStore().getData().projects.length === 0) {
         const selectedProject = this.getStore().getData().selectedProject;
@@ -35,15 +36,18 @@ sap.ui.define([
           return project;
         });
         window.localStorage.setItem('projects', JSON.stringify(newProjectsState));
+        this.toggleBusy(false);
       }
       if (window.localStorage.getItem('projects') && this.getStore().getData().projects.length === 0) {
         this.dispatch(A.setProjects(JSON.parse(window.localStorage.getItem('projects'))));
+        this.toggleBusy(false);
       }
       else
       HttpService.getProjects()
         .done(oData => {
           window.localStorage.setItem('projects', JSON.stringify(oData.value));
           this.dispatch(A.setProjects(oData.value));
+          this.toggleBusy(false);
         })
         .fail(err => this.showErrorMessage(err.message));
     },
@@ -56,10 +60,12 @@ sap.ui.define([
       }, 100);
     },
     onPressSubmit() {
+      this.toggleBusy(true);
       const sNewProjectName = this.state.getProperty('/newProjectName');
       const sNewProjectDesc = this.state.getProperty('/newProjectDesc');
       if (!sNewProjectName || !sNewProjectDesc) {
         this.showErrorMessage(this.getResourceBundle().getText('createProjectError'));
+        this.toggleBusy(false);
         return;
       };
       HttpService.createProject({ name: sNewProjectName, desc: sNewProjectDesc })
@@ -69,6 +75,7 @@ sap.ui.define([
           this.state.setProperty('/newProjectName', '');
           this.state.setProperty('/newProjectDesc', '');
           this.onPressCancel();
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
@@ -79,17 +86,20 @@ sap.ui.define([
     },
 
     onDelete(oEvent) {
+      this.toggleBusy(true);
       const oProjectListItem = oEvent.getParameter('listItem');
       const { ID } = oProjectListItem.getBindingContext('store').getObject();
       HttpService.deleteProject(ID)
         .done(() => {
           this.dispatch(A.removeProject(ID, this.getStore().getData()));
           this.showSuccessMessage(this.getResourceBundle().getText('deleteProjectSuccess'));
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message));
     },
 
     onGoToProject(oEvent) {
+      this.toggleBusy(true);
       const { ID } = oEvent.getSource().getBindingContext('store').getObject();
       this.navTo(ROUTES.DETAIL, {id: ID});
     }

@@ -23,16 +23,21 @@ sap.ui.define([
       this.sProjectId = oEvent.getParameter('arguments').id;
 
       HttpService.getProject(this.sProjectId)
-        .done(oData => this.dispatch(A.setSelectedProject(oData)))
+        .done(oData => {
+          this.dispatch(A.setSelectedProject(oData));
+          this.toggleBusy(false);
+        })
         .fail(res => MessageBox.error(res.responseJSON.error.message, { onClose: () => this.navTo(ROUTES.HOME)}));
     },
     onUpdateProject() {
+      this.toggleBusy(true);
       HttpService.updateProject(this.sProjectId,
         { name: this.getStore().getData().selectedProject.name,
           desc: this.getStore().getData().selectedProject.desc })
         .done(() => {
           this.showSuccessMessage(this.getResourceBundle().getText('updateProjectSuccess'));
           this.editProjectDialog.close();
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
@@ -48,10 +53,12 @@ sap.ui.define([
       this.editProjectDialog.open();
     },
     onCreateCard(oEvent) {
+      this.toggleBusy(true);
       const sNewCardName = this.state.getProperty('/newCardName');
       this.state.setProperty('/newCardName', '');
       if (!sNewCardName) {
         this.showErrorMessage(this.getResourceBundle().getText('cardNameError'));
+        this.toggleBusy(false);
         return;
       }
       HttpService.createCard({ name: sNewCardName, project_ID: this.sProjectId })
@@ -59,6 +66,7 @@ sap.ui.define([
           this.showSuccessMessage(this.getResourceBundle().getText('createItemSuccess'));
           this.dispatch(A.addCard(oData, this.getStore().getData()));
           this.createCardDialog.close();
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message));
     },
@@ -67,6 +75,7 @@ sap.ui.define([
       oEvent.getSource().getParent().getParent().setMode(bPressed? 'Delete' : 'SingleSelectMaster');
     },
     onCreateTask(oEvent, sCardID) {
+      this.toggleBusy(true);
       const oInput = oEvent.getSource();
       const sNewTaskName = oInput.getValue();
       if (!sNewTaskName) return;
@@ -75,34 +84,41 @@ sap.ui.define([
           this.showSuccessMessage(this.getResourceBundle().getText('createItemSuccess'));
           this.dispatch(A.addCardTask(sCardID, oData, this.getStore().getData()));
           oInput.setValue('');
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
     onDeleteTask(oEvent) {
+      this.toggleBusy(true);
       const { ID, card_ID } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
       HttpService.deleteCardItem(ID)
         .done(() => {
           this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));
           this.dispatch(A.removeCardTask(ID, card_ID, this.getStore().getData()));
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message));
     },
     onChangeListItemStatus(oEvent) {
+      this.toggleBusy(true);
       let { ID, done } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
       done = done === 0? 1 : 0;
       HttpService.updateCardItem(ID, { done: done })
         .done(oData => {
           this.showSuccessMessage(this.getResourceBundle().getText('updateItemSuccess'));
           this.dispatch(A.updateCardTask(ID, oData ,this.getStore().getData()));
+          this.toggleBusy(false);
           })
           .fail(res => this.showErrorMessage(res,responseJSON,error,message));
     },
     onDeleteCard(oEvent) {
+      this.toggleBusy(true);
       const { ID } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
       HttpService.deleteCard(ID)
         .done(() => {
           this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));
           this.dispatch(A.deleteCard(ID, this.getStore().getData()))
+          this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
