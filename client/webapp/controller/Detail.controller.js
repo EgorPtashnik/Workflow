@@ -12,9 +12,7 @@ sap.ui.define([
   return BaseController.extend('client.controller.Detail', {
     onInit() {
       this.state = new JSONModel({
-        showNewCardInput: false,
         newCardName: '',
-        editMode: false
       });
       this.setModel(this.state, 'state');
 
@@ -27,6 +25,16 @@ sap.ui.define([
       HttpService.getProject(this.sProjectId)
         .done(oData => this.dispatch(A.setSelectedProject(oData)))
         .fail(res => MessageBox.error(res.responseJSON.error.message, { onClose: () => this.navTo(ROUTES.HOME)}));
+    },
+    onUpdateProject() {
+      HttpService.updateProject(this.sProjectId,
+        { name: this.getStore().getData().selectedProject.name,
+          desc: this.getStore().getData().selectedProject.desc })
+        .done(() => {
+          this.showSuccessMessage(this.getResourceBundle().getText('updateProjectSuccess'));
+          this.editProjectDialog.close();
+        })
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
     closeDialog(oEvent) {
       oEvent.getSource().getParent().close();
@@ -41,7 +49,7 @@ sap.ui.define([
     },
     onCreateCard(oEvent) {
       const sNewCardName = this.state.getProperty('/newCardName');
-      this.state.setProperty('/newCardName');
+      this.state.setProperty('/newCardName', '');
       if (!sNewCardName) {
         this.showErrorMessage(this.getResourceBundle().getText('cardNameError'));
         return;
@@ -98,39 +106,8 @@ sap.ui.define([
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
     },
-
-    // onDropTask(oEvent) {
-    //   let sCardId;
-    //   const oDraggedCardItemData = oEvent.getParameter('draggedControl').getBindingContext('store').getObject();
-    //   const oDroppedCardData = oEvent.getParameter('droppedControl').getBindingContext('store').getObject();
-    //   const curCardId = oDraggedCardItemData.card_ID;
-    //   if (oDroppedCardData.ID === curCardId) return;
-    //   sCardId = oDroppedCardData.ID;
-    //   const sCardItemId = oDraggedCardItemData.ID;
-    //   HttpService.updateCardItem(sCardItemId, { card_ID: sCardId })
-    //   .done(oData => {
-    //       this.dispatch(A.addCardTask(sCardId, oData, this.getStore().getData()));
-    //       this.dispatch(A.removeCardTask(sCardItemId, curCardId, this.getStore().getData()));
-    //   })
-    //   .fail(res => MessageBox.error(res.responseJSON.error.message));
-    // },
-
-    // onGoHome() {
-    //   this.state.setProperty('/createCard', false);
-    //   this.state.setProperty('/newCardName', '');
-    //   this.onNavBack();
-    // },
-    // onEdit(oEvent) {
-    //   const bIsPressed = oEvent.getParameter('pressed');
-    //   if (!bIsPressed) {
-    //     const sNewProjectName = this.getStore().getProperty('/selectedProject/name');
-    //     const sNewProjectDesc = this.getStore().getProperty('/selectedProject/desc');
-    //     HttpService.updateProject(this.sProjectId, {
-    //       name: sNewProjectName,
-    //       desc: sNewProjectDesc
-    //     })
-    //     .fail(res => MessageBox.error(res.responseJSON.error.message))
-      // }
-    // }
+    onGoProjects() {
+      this.getRouter().navTo(ROUTES.HOME);
+    }
   });
 });

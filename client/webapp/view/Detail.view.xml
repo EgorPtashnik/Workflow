@@ -4,13 +4,16 @@
   xmlns:m='sap.m'
   xmlns='sap.uxap'
   xmlns:mvc='sap.ui.core.mvc'>
-  <ObjectPageLayout showTitleInHeaderContent='true' sections='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" }}'>
+  <ObjectPageLayout sections='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" }}'>
     <headerTitle>
       <ObjectPageHeader objectTitle='{store>/selectedProject/name}'
         objectSubtitle='{store>/selectedProject/desc}'
         objectImageURI='resources/img/project.jpg'>
-        <ObjectPageHeaderActionButton type='Emphasized' press='openCreateCardDialog' hideText='false' hideIcon='true' text='{i18n>createNewCard}'/>
-        <ObjectPageHeaderActionButton hideText='false' hideIcon='true' text='{i18n>edit}' press='openEditProjectDialog'/>
+        <actions>
+          <ObjectPageHeaderActionButton type='Emphasized' press='openCreateCardDialog' hideText='false' hideIcon='true' text='{i18n>createNewCard}'/>
+          <ObjectPageHeaderActionButton hideText='false' hideIcon='true' text='{i18n>edit}' press='openEditProjectDialog'/>
+          <ObjectPageHeaderActionButton type='Transparent' hideText='false' hideIcon='true' text='{i18n>projects}' press='onGoProjects'/>
+        </actions>
       </ObjectPageHeader>
     </headerTitle>
 
@@ -21,13 +24,12 @@
             <m:List noDataText='{i18n>noTasks}' itemPress='onChangeListItemStatus' delete='onDeleteTask' items='{path: "store>items", templateShareable: "false"}'>
               <m:headerToolbar>
                 <m:Toolbar>
-                  <m:Title text='{store>name}'/>
+                  <m:Input class='input' placeholder='{i18n>newTask}' submit='onCreateTask($event, ${store>ID})'/>
                   <m:ToolbarSpacer/>
-                  <m:Input width='300px' placeholder='{i18n>newTask}' submit='onCreateTask($event, ${store>ID})'/>
                   <m:ToggleButton icon='sap-icon://delete' press='onChangeListMode'/>
                 </m:Toolbar>
               </m:headerToolbar>
-              <m:StandardListItem type='Active' title='{store>name}' highlight='{=${store>done} === 0? "Error" : "Success"}'
+              <m:StandardListItem wrapping='true' type='Active' title='{store>name}' highlight='{=${store>done} === 0? "Error" : "Success"}'
                 info='{=${store>done} === 0? "In Progress" : "Done"}' infoState='{=${store>done} === 0? "Error" : "Success"}'/>
             </m:List>
           </m:VBox>
@@ -54,7 +56,7 @@
       <m:Label text='{i18n>projectDesc}'/>
       <m:TextArea growing='true' width='100%' value='{store>/selectedProject/desc}'/>
       <m:List noDataText='{i18n>noCards}' mode='Delete' delete='onDeleteCard' items='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" } }'>
-        <m:StandardListItem title="{store>name}" info="{store>items/length} items" infoState="Info"/>
+        <m:StandardListItem title="{store>name}" info="{store>items/length} items" infoState="Information"/>
       </m:List>
     </m:VBox>
     <m:buttons>

@@ -1,65 +1,12 @@
 .list_wrapper {
   background-color: white;
   border: 1px solid rgba(0,0,0,0.3);
-  border-top-left-radius: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
-.task_wrapper {
-  min-width: 300px;
-  width: 300px;
-  border-left: 1px solid rgba(0,0,0,0.3);
-  border-top: 1px solid rgba(0,0,0,0.3);
-  border-bottom: 1px solid rgba(0,0,0,0.3);
-}
-.task_wrapper:last-child {
-  border-right: 1px solid rgba(0,0,0,0.3);
-}
-.task_wrapper_title {
-  border-bottom: 2px solid black;
-  background-color: ghostwhite;
-}
-.task {
-  background-color: white;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
-  width: 100%;
-  height: 80px;
-}
-.card {
-  background-color: white;
-  border: 1px solid rgba(0,0,0,0.3);
-  border-radius: 5px;
-  padding: 0.5rem;
-  height: fit-content;
-  width: 15rem;
-}
-.create_card_btn {
-  border: none;
-  background-color: whitesmoke;
-  border-radius: 50%;
-  width: 3.1rem;
-  height: 3.1rem;
-  outline: none;
-}
-.create_card_btn:hover {
-  background-color: #ebf5fe;
-  border: 1px solid #0854a0;
-}
-.create_card_btn>.sapMBtnHoverable>.sapUiIcon:hover {
-  cursor: pointer;
-}
-.delete_card_btn {
-  border: 1px solid red;
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 220px;
-  top: -15px;
-  outline: none;
-}
-.delete_card_btn:hover {
-  cursor: pointer;
+
+.input {
+  max-width: 400px;
 }
 
 .scale_in {
@@ -69,7 +16,4 @@
 .scale_out {
   transition: 0.1s;
   transform: scale(0)
-}
-.full_height {
-  height: 100%;
 }

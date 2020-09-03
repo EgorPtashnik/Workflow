@@ -28,7 +28,17 @@ sap.ui.define([
     _onRouteMatched(oEvent) {
       if (oEvent.getParameter('name') !== ROUTES.HOME) return;
 
-      if (window.localStorage.getItem('projects')) this.dispatch(A.setProjects(JSON.parse(window.localStorage.getItem('projects'))))
+      if (!this.getStore().getData().projects.length === 0) {
+        const selectedProject = this.getStore().getData().selectedProject;
+        const newProjectsState = this.getStore().getData().projects.map(project => {
+          if (project.ID === this.getStore().getData().selectedProject.ID) return selectedProject;
+          return project;
+        });
+        window.localStorage.setItem('projects', JSON.stringify(newProjectsState));
+      }
+      if (window.localStorage.getItem('projects') && this.getStore().getData().projects.length === 0) {
+        this.dispatch(A.setProjects(JSON.parse(window.localStorage.getItem('projects'))));
+      }
       else
       HttpService.getProjects()
         .done(oData => {
