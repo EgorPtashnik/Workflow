@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/core/UIComponent","client/model/models"],function(e,t){"use strict";return e.extend("client.Component",{metadata:{manifest:"json"},init:function(){e.prototype.init.apply(this,arguments),this.getRouter().initialize(),this.setModel(t.createDeviceModel(),"device"),this.setModel(t.createStore(),"store")}})});
