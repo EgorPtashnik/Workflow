@@ -4,8 +4,6 @@
   "description": "Application for workflow purposes",
   "main": "index.js",
   "scripts": {
-    "build:cds": "cds build/all --clean",
-    "deploy:cds": "cds deploy --to sqlite",
     "start": "node index.js",
     "start:live": "nodemon index.js --open"
   },
