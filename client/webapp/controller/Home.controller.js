@@ -35,21 +35,16 @@ sap.ui.define([
           if (project.ID === this.getStore().getData().selectedProject.ID) return selectedProject;
           return project;
         });
-        window.localStorage.setItem('projects', JSON.stringify(newProjectsState));
+        this.dispatch(A.setProjects(newProjectsState));
         this.toggleBusy(false);
-      }
-      if (window.localStorage.getItem('projects') && this.getStore().getData().projects.length === 0) {
-        this.dispatch(A.setProjects(JSON.parse(window.localStorage.getItem('projects'))));
-        this.toggleBusy(false);
-      }
-      else
-      HttpService.getProjects()
+      } else {
+        HttpService.getProjects()
         .done(oData => {
-          window.localStorage.setItem('projects', JSON.stringify(oData.value));
           this.dispatch(A.setProjects(oData.value));
           this.toggleBusy(false);
         })
         .fail(err => this.showErrorMessage(err.message));
+      }
     },
     onPressCreate() {
       this.state.setProperty('/showFooter', true);
