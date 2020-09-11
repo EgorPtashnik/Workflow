@@ -4,6 +4,7 @@ using { cuid, managed } from '@sap/cds/common';
 
 entity Project: cuid, managed {
   name: String;
+  github: String;
   desc: String;
 
   cards: Composition of many Card on cards.project = $self;

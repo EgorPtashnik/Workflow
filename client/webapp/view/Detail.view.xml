@@ -20,7 +20,7 @@
     <sections>
       <ObjectPageSection titleUppercase='false' title='{store>name}'>
         <ObjectPageSubSection>
-          <m:VBox class='list_wrapper'>
+          <m:VBox>
             <m:List noDataText='{i18n>noTasks}' itemPress='onChangeListItemStatus' delete='onDeleteTask' items='{path: "store>items", templateShareable: "false"}'>
               <m:headerToolbar>
                 <m:Toolbar>

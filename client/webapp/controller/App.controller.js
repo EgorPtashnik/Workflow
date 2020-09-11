@@ -1,7 +1,12 @@
 sap.ui.define([
-  'sap/ui/core/mvc/Controller'
-], function(Controller) {
+  'client/controller/BaseController'
+], function(BaseController) {
   "use strict";
 
-  return Controller.extend('client.controller.App', {});
+  return BaseController.extend('client.controller.App', {
+    onInit() {
+      sap.ui.getCore().applyTheme(this.getThemeName(this.getStore().getProperty('/theme') || 'sap_fiori_3', this.getStore().getProperty('/darkMode') || false));
+      sap.ui.getCore().getConfiguration().setLanguage(this.getStore().getProperty('/locale') || 'en_EN');
+    }
+  });
 });

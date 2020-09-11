@@ -18,7 +18,10 @@ sap.ui.define([
         cards: [],
         busy: false,
         cardItems: [],
-        selectedProject: {}
+        selectedProject: {},
+        theme: localStorage.getItem('theme') || 'sap_fiori_3',
+        darkMode: localStorage.getItem('darkMode') === 'true'? true : false,
+        locale: localStorage.getItem('locale') || 'en_EN'
       });
 
       return oStore;

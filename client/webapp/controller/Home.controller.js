@@ -1,20 +1,22 @@
 sap.ui.define([
   'client/controller/BaseController',
   'sap/ui/model/json/JSONModel',
+  'sap/ui/core/Fragment',
   'client/constant/Routes',
   'client/service/Http.service',
   'client/model/actions'
-], function(BaseController, JSONModel,
+], function(BaseController, JSONModel, Fragment,
             ROUTES, HttpService, A) {
   "use strict";
 
   return BaseController.extend('client.controller.Home', {
 
     onInit() {
+      BaseController.prototype.onInit.apply(this, arguments);
       this.state = new JSONModel({
-        showFooter: false,
         newProjectName: '',
         newProjectDesc: '',
+        newProejctGit: '',
         projectNameFilter: '',
         deleteMode: false
       });
@@ -46,43 +48,51 @@ sap.ui.define([
         .fail(err => this.showErrorMessage(err.message));
       }
     },
-    onPressCreate() {
-      this.state.setProperty('/showFooter', true);
-      setTimeout(() => {
-        this.oFooter.addStyleClass('scale_in');
-        this.oFooter.removeStyleClass('scale_out');
-        this.byId('idProjectInput').focus();
-      }, 100);
+    onPressCreate(oEvent) {
+      const oButton = oEvent.getSource();
+      const bIsTouchDevice = this.oDeviceModel.getProperty('/support/touch');
+      if (!this._oPopover) {
+        Fragment.load({
+          name: 'client.view.fragment.CreateProjectPopover',
+          controller: this
+        }).then(oPopover => {
+          this._oPopover = oPopover;
+          this.getView().addDependent(this._oPopover);
+          this._oPopover.openBy(oButton);
+        });
+      } else {
+        this._oPopover.openBy(oButton);
+      }
     },
     onPressSubmit() {
       this.toggleBusy(true);
       const sNewProjectName = this.state.getProperty('/newProjectName');
       const sNewProjectDesc = this.state.getProperty('/newProjectDesc');
+      const sNewProjectGit = this.state.getProperty('/newProjectGit');
       if (!sNewProjectName || !sNewProjectDesc) {
         this.showErrorMessage(this.getResourceBundle().getText('createProjectError'));
         this.toggleBusy(false);
         return;
       };
-      HttpService.createProject({ name: sNewProjectName, desc: sNewProjectDesc })
+      HttpService.createProject({ name: sNewProjectName, desc: sNewProjectDesc, github: sNewProjectGit })
         .done(oData => {
           this.showSuccessMessage(this.getResourceBundle().getText('createProjectSuccess'));
           this.dispatch(A.addProject({...oData}, this.getStore().getData()));
           this.state.setProperty('/newProjectName', '');
           this.state.setProperty('/newProjectDesc', '');
-          this.onPressCancel();
           this.toggleBusy(false);
+          this._oPopover.close();
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
-    },
-    onPressCancel() {
-      this.oFooter.addStyleClass('scale_out');
-      this.oFooter.removeStyleClass('scale_in');
-      setTimeout(() => this.state.setProperty('/showFooter', false), 100);
     },
 
     onDelete(oEvent) {
       this.toggleBusy(true);
-      const oProjectListItem = oEvent.getParameter('listItem');
+      let oProjectListItem = oEvent.getParameter('listItem');
+      if (!oProjectListItem) {
+        const oList = oEvent.getSource().getParent();
+        oProjectListItem = oList.getSwipedItem();
+      };
       const { ID } = oProjectListItem.getBindingContext('store').getObject();
       HttpService.deleteProject(ID)
         .done(() => {
@@ -97,6 +107,10 @@ sap.ui.define([
       this.toggleBusy(true);
       const { ID } = oEvent.getSource().getBindingContext('store').getObject();
       this.navTo(ROUTES.DETAIL, {id: ID});
+    },
+    onGoToSettings() {
+      this.toggleBusy(true);
+      this.navTo(ROUTES.SETTINGS);
     }
   });
 });

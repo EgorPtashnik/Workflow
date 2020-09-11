@@ -1,19 +1,7 @@
-.list_wrapper {
-  background-color: white;
-  border: 1px solid rgba(0,0,0,0.3);
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
 .input {
   max-width: 400px;
 }
 
-.scale_in {
-  transition: 0.1s;
-  transform: scale(1);
-}
-.scale_out {
-  transition: 0.1s;
-  transform: scale(0)
+.min-height>div>textarea {
+  min-height: 400px !important;
 }

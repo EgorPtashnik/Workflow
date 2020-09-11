@@ -1,0 +1,13 @@
+<core:FragmentDefinition xmlns:core='sap.ui.core' xmlns='sap.m'>
+  <ResponsivePopover contentWidth='450px' title='{i18n>createNewProject}' placement='Left'>
+    <VBox class='sapUiTinyMargin'>
+      <Label text='{i18n>projectName}:'/>
+      <Input value='{state>/newProjectName}' submit='onPressSubmit' placeholder='{i18n>newProjectName}'/>
+      <Label text='{i18n>projectGit}:'/>
+      <Input value='{state>/newProjectGit}' submit='onPressSubmit' placeholder='{i18n>newProjectGit}'/>
+      <Label text='{i18n>projectDesc}:'/>
+      <TextArea width='100%' class='min-height' value='{state>/newProjectDesc}' placeholder='{i18n>newProjectDesc}'/>
+      <Button width='100%' type='Emphasized' text='{i18n>submit}' press='onPressSubmit'/>
+    </VBox>
+  </ResponsivePopover>
+</core:FragmentDefinition>

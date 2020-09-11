@@ -3,7 +3,7 @@
   displayBlock='true'
   xmlns='sap.m'
   xmlns:mvc='sap.ui.core.mvc'>
-  <Shell backgroundColor='#004ba8'>
+  <Shell>
     <App id='idApp' busy='{store>/busy}'/>
   </Shell>
 </mvc:View>

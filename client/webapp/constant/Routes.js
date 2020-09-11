@@ -5,6 +5,7 @@ sap.ui.define([
   return {
     HOME: 'Home',
     DETAIL: 'Detail',
+    SETTINGS: 'Settings',
 
     SERVER: {
       PROJECTS: '/odata/Projects',

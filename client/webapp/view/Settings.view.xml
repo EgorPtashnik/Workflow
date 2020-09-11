@@ -1,0 +1,38 @@
+<mvc:View
+  controllerName='client.controller.Settings'
+  displayBlock='true'
+  xmlns='sap.m'
+  xmlns:core='sap.ui.core'
+  xmlns:mvc='sap.ui.core.mvc'>
+  <Page title='{i18n>settings}' showNavButton='true' navButtonPress='onNavBack'>
+    <List>
+      <items>
+        <CustomListItem>
+          <HBox class='sapUiTinyMargin' alignItems='Center' justifyContent='SpaceBetween'>
+            <Label text='{i18n>language}:'/>
+            <Select selectedKey='{store>/locale}' change='onChangeLocale'>
+              <core:Item key='en_EN' text='English'/>
+              <core:Item key='ru_RU' text='Русский'/>
+            </Select>
+          </HBox>
+        </CustomListItem>
+        <CustomListItem>
+          <HBox class='sapUiTinyMargin' alignItems='Center' justifyContent='SpaceBetween'>
+            <Label text='{i18n>theme}:'/>
+            <Select selectedKey='{store>/theme}' change='onChangeTheme'>
+              <core:Item key='sap_fiori_3' text='SAP Quartz'/>
+              <core:Item key='sap_belize' text='SAP Belize'/>
+              <core:Item key='sap_fiori_3_hcw' text='High Contrast'/>
+            </Select>
+          </HBox>
+        </CustomListItem>
+        <CustomListItem>
+          <HBox class='sapUiTinyMargin' alignItems='Center' justifyContent='SpaceBetween'>
+            <Label text='{i18n>dark}:'/>
+            <Switch state='{store>/darkMode}' change='onToggleDarkMode' customTextOff=' ' customTextOn=' '/>
+          </HBox>
+        </CustomListItem>
+      </items>
+    </List>
+  </Page>
+</mvc:View>

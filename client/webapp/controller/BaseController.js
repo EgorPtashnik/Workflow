@@ -12,6 +12,14 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("client.controller.BaseController", {
+    onInit() {
+      this.oDeviceModel = this.getOwnerComponent().getModel('device');
+      this.getView().addStyleClass(this._getDensityClass());
+    },
+    _getDensityClass() {
+      this.oDeviceModel = this.getOwnerComponent().getModel('device');
+      return this.oDeviceModel.getProperty('/support/touch')? 'sapUiSizeCozy' : 'sapUiSizeCompact';
+    },
     getStore() {
       return this.getOwnerComponent().getModel('store');
     },
@@ -43,18 +51,25 @@ sap.ui.define([
     },
     showSuccessMessage(sMessage) {
       this.getLogger().info(sMessage);
-      MessageToast.show(sMessage, {
+      MessageToast.show(sMessage, !this.oDeviceModel.getProperty('/support/touch')? {
         my: 'right top',
         at: 'right top',
         offset: '-10 10'
-      });
+      } : {});
     },
     showErrorMessage(sMessage) {
-      MessageBox.error(sMessage);
+      MessageBox.error(sMessage, {
+        styleClass: this._getDensityClass()
+      });
       this.getLogger().error(sMessage);
     },
     toggleBusy(bBusy) {
       this.dispatch(A.toggleBusy(bBusy));
+    },
+    getThemeName(sTheme, bDarkMode) {
+      return sTheme === 'sap_fiori_3'? bDarkMode? 'sap_fiori_3_dark' : 'sap_fiori_3' :
+        sTheme === 'sap_belize'? bDarkMode? 'sap_belize_plus' : 'sap_belize' :
+        sTheme === 'sap_fiori_3_hcw'? bDarkMode? 'sap_fiori_3_hcb' : 'sap_fiori_3_hcw' : '';
     }
 
   });

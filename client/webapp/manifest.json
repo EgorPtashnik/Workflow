@@ -79,6 +79,11 @@
           "name": "Detail",
           "pattern": "project/{id}",
           "target": "Target_Detail"
+        },
+        {
+          "name": "Settings",
+          "pattern": "settings",
+          "target": "Target_Settings"
         }
       ],
       "targets": {
@@ -89,6 +94,10 @@
         "Target_Detail": {
           "viewType": "XML",
           "viewName": "Detail"
+        },
+        "Target_Settings": {
+          "viewType": "XML",
+          "viewName": "Settings"
         }
       }
     }

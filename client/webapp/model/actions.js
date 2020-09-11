@@ -5,7 +5,7 @@ sap.ui.define([
 
   return {
     setProjects(aProjects, store) {
-      return { projects: aProjects }
+      return { projects: aProjects };
     },
     toggleBusy(bBusy) {
       return { busy: bBusy};
@@ -57,7 +57,7 @@ sap.ui.define([
           arr.push(item);
           return arr;
         }, [])
-      }}
+      }};
     }
   }
 })

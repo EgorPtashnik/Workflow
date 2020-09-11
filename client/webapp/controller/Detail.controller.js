@@ -11,6 +11,7 @@ sap.ui.define([
 
   return BaseController.extend('client.controller.Detail', {
     onInit() {
+      BaseController.prototype.onInit.apply(this, arguments);
       this.state = new JSONModel({
         newCardName: '',
       });
@@ -46,6 +47,7 @@ sap.ui.define([
     },
     openCreateCardDialog() {
       if (!this.createCardDialog) this.createCardDialog = this.byId('idCreateCardDialog');
+      this.createCardDialog.addStyleClass(this._getDensityClass());
       this.createCardDialog.open();
     },
     openEditProjectDialog() {

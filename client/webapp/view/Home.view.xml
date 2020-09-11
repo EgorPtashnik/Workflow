@@ -2,43 +2,45 @@
   xmlns:core='sap.ui.core'
   xmlns='sap.m'
   xmlns:mvc='sap.ui.core.mvc'>
-  <Page floatingFooter='true' showHeader='false'>
+  <Page title='{i18n>appTitle}'>
+    <headerContent>
+      <Button icon='sap-icon://add' tooltip='{i18n>createNewProject}' press='onPressCreate'/>
+      <Button tooltip='{i18n>settings}' icon='sap-icon://action-settings' press='onGoToSettings'/>
+    </headerContent>
 
-    <VBox class='sapUiTinyMargin list_wrapper'>
-      <List items='{ path: "store>/projects", sorter: { path: "createdAt" } }'
-        noDataText='{i18n>noProjects}'
-        delete='onDelete'
-        mode='{=${state>/deleteMode}? "Delete" : "None"}'>
-        <headerToolbar>
-          <OverflowToolbar>
-            <Title text='{i18n>projects}: {store>/projects/length}'/>
-            <ToolbarSpacer/>
-            <ComboBox placeholder='{i18n>search}' items='{store>/projects}' width='15rem' value='{state>/projectNameFilter}'>
-              <core:Item text='{store>name}'/>
-            </ComboBox>
-            <ToggleButton pressed='{state>/deleteMode}' type='Reject' icon='sap-icon://delete'/>
-            <Button type='Ghost' icon='sap-icon://add' tooltip='{i18n>createNewProject}' press='onPressCreate'/>
-          </OverflowToolbar>
-        </headerToolbar>
-        <CustomListItem type='Navigation' press='onGoToProject' visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
-          <HBox class='sapUiTinyMargin' alignItems='Center'>
-            <core:Icon class='sapUiTinyMarginEnd' size='2rem' src='sap-icon://responsive'/>
-            <VBox>
-              <Title text='{store>name}'/>
+    <content>
+      <VBox class='sapUiTinyMargin' visible='{device>/support/touch}'>
+        <ComboBox placeholder='{i18n>search}' items='{store>/projects}' width='100%' value='{state>/projectNameFilter}'>
+          <core:Item text='{store>name}'/>
+        </ComboBox>
+      </VBox>
+      <VBox class='sapUiTinyMargin'>
+        <List items='{ path: "store>/projects", sorter: { path: "createdAt" } }'
+          noDataText='{i18n>noProjects}'
+          delete='onDelete'
+          mode='{=${state>/deleteMode}? "Delete" : "None"}'>
+          <headerToolbar>
+            <OverflowToolbar>
+              <Title text='{i18n>projects}: {store>/projects/length}'/>
+              <ToolbarSpacer/>
+              <ComboBox visible='{=!${device>/support/touch}}' placeholder='{i18n>search}' items='{store>/projects}' width='15rem' value='{state>/projectNameFilter}'>
+                <core:Item text='{store>name}'/>
+              </ComboBox>
+              <ToggleButton visible='{=!${device>/support/touch}}' pressed='{state>/deleteMode}' type='Reject' icon='sap-icon://delete'/>
+            </OverflowToolbar>
+          </headerToolbar>
+          <CustomListItem type='{=${device>/support/touch}? "Active" : "Navigation"}' press='onGoToProject' visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
+            <VBox class='sapUiTinyMargin'>
+              <Title text='{store>name}' titleStyle='H4'/>
+              <Link visible='{=!!${store>github}}' emphasized='true' target='_blank' text='{i18n>goGitHub}' href='{store>github}'/>
               <Text text='{store>desc}'/>
             </VBox>
-          </HBox>
-        </CustomListItem>
-      </List>
-    </VBox>
-
-    <footer>
-      <Toolbar id='idFooter' class='scale_out' visible='{state>/showFooter}'>
-        <Input id='idProjectInput' submit='onPressSubmit' value='{state>/newProjectName}' placeholder='{i18n>newProjectName}'/>
-        <Input value='{state>/newProjectDesc}' submit='onPressSubmit' placeholder='{i18n>newProjectDesc}'/>
-        <Button type='Emphasized' text='{i18n>submit}' press='onPressSubmit'/>
-        <Button type='Reject' text='{i18n>cancel}' press='onPressCancel'/>
-      </Toolbar>
-    </footer>
+          </CustomListItem>
+          <swipeContent>
+            <Button type='Transparent' icon='sap-icon://decline' press='onDelete'/>
+          </swipeContent>
+        </List>
+      </VBox>
+    </content>
   </Page>
 </mvc:View>
