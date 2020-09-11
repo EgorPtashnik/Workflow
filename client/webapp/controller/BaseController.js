@@ -6,12 +6,14 @@ sap.ui.define([
   'sap/m/MessageBox',
   'sap/m/MessageToast',
   'client/constant/Routes',
-  'client/model/actions'
+  'client/model/actions',
+  'client/model/formatter'
 ], function(Controller, History, UIComponent, Log, MessageBox, MessageToast,
-            ROUTES, A) {
+            ROUTES, A, Formatter) {
   "use strict";
 
   return Controller.extend("client.controller.BaseController", {
+    formatter: Formatter,
     onInit() {
       this.oDeviceModel = this.getOwnerComponent().getModel('device');
       this.getView().addStyleClass(this._getDensityClass());

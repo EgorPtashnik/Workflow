@@ -31,8 +31,13 @@
           </headerToolbar>
           <CustomListItem type='{=${device>/support/touch}? "Active" : "Navigation"}' press='onGoToProject' visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
             <VBox class='sapUiTinyMargin'>
-              <Title text='{store>name}' titleStyle='H4'/>
-              <Link visible='{=!!${store>github}}' emphasized='true' target='_blank' text='{i18n>goGitHub}' href='{store>github}'/>
+              <HBox alignItems='Center'>
+                <Avatar backgroundColor='{path: "store>iconColor", formatter: ".formatter.iconColor"}' fallbackIcon='{store>icon}'/>
+                <VBox class='sapUiTinyMarginBegin'>
+                  <Title text='{store>name}' titleStyle='H4'/>
+                  <Link visible='{=!!${store>github}}' emphasized='true' target='_blank' text='{i18n>goGitHub}' href='{store>github}'/>
+                </VBox>
+              </HBox>
               <Text text='{store>desc}'/>
             </VBox>
           </CustomListItem>
