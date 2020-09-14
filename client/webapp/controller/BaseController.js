@@ -53,7 +53,7 @@ sap.ui.define([
     },
     showSuccessMessage(sMessage) {
       this.getLogger().info(sMessage);
-      MessageToast.show(sMessage, !this.oDeviceModel.getProperty('/support/touch')? {
+      MessageToast.show(sMessage, this.oDeviceModel.getProperty('/resize/width') > 1700? {
         my: 'right top',
         at: 'right top',
         offset: '-10 10'

@@ -32,21 +32,6 @@ sap.ui.define([
         })
         .fail(res => MessageBox.error(res.responseJSON.error.message, { onClose: () => this.navTo(ROUTES.HOME)}));
     },
-    onUpdateProject() {
-      this.toggleBusy(true);
-      HttpService.updateProject(this.sProjectId,
-        { name: this.getStore().getData().selectedProject.name,
-          desc: this.getStore().getData().selectedProject.desc })
-        .done(() => {
-          this.showSuccessMessage(this.getResourceBundle().getText('updateProjectSuccess'));
-          this.editProjectDialog.close();
-          this.toggleBusy(false);
-        })
-        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
-    },
-    closeDialog(oEvent) {
-      oEvent.getSource().getParent().close();
-    },
     openCreateCardPopover(oEvent) {
       const oButton = oEvent.getSource();
       if (!this._oCreateCardPopover) {
@@ -61,10 +46,6 @@ sap.ui.define([
       } else {
         this._oCreateCardPopover.openBy(oButton);
       }
-    },
-    openEditProjectDialog() {
-      if (!this.editProjectDialog) this.editProjectDialog = this.byId('idEditProjectDialog');
-      this.editProjectDialog.open();
     },
     onCreateCard(oEvent) {
       this.toggleBusy(true);
@@ -135,19 +116,9 @@ sap.ui.define([
           })
           .fail(res => this.showErrorMessage(res,responseJSON,error,message));
     },
-    onDeleteCard(oEvent) {
+    onEditProject() {
       this.toggleBusy(true);
-      const { ID } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
-      HttpService.deleteCard(ID)
-        .done(() => {
-          this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));
-          this.dispatch(A.deleteCard(ID, this.getStore().getData()))
-          this.toggleBusy(false);
-        })
-        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
-    },
-    onGoProjects() {
-      this.getRouter().navTo(ROUTES.HOME);
+      this.navTo(ROUTES.DETAIL_EDIT, { id: this.sProjectId});
     }
   });
 });

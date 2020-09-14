@@ -4,7 +4,7 @@
   <Page showNavButton='true' navButtonPress='onNavBack' title='{store>/selectedProject/name}'>
     <headerContent>
       <Button tooltip='{i18n>createNewList}' press='openCreateCardPopover' icon='sap-icon://add'/>
-      <Button icon='sap-icon://edit'/>
+      <Button  tooltip='{i18n>edit}' icon='sap-icon://edit' press='onEditProject'/>
       <Button tooltip='{i18n>settings}' icon='sap-icon://action-settings' press='onGoToSettings'/>
     </headerContent>
     <content>
@@ -41,31 +41,4 @@
       </IconTabBar>
     </content>
   </Page>
-
-  <!-- <m:Dialog title='{i18n>createNewCard}' id='idCreateCardDialog'>
-    <m:VBox class='sapUiTinyMargin'>
-      <m:Label text='{i18n>newCardName}'/>
-      <m:Input value='{state>/newCardName}' submit='onCreateCard'/>
-    </m:VBox>
-    <m:buttons>
-      <m:Button type='Emphasized' press='onCreateCard' text='{i18n>submit}'/>
-      <m:Button type='Transparent' text='{i18n>cancel}' press='closeDialog'/>
-    </m:buttons>
-  </m:Dialog>
-
-  <m:Dialog title='{i18n>editProject}' id='idEditProjectDialog'>
-    <m:VBox class='sapUiTinyMargin'>
-      <m:Label text='{i18n>projectName}:'/>
-      <m:Input value='{store>/selectedProject/name}'/>
-      <m:Label text='{i18n>projectDesc}'/>
-      <m:TextArea growing='true' width='100%' value='{store>/selectedProject/desc}'/>
-      <m:List noDataText='{i18n>noCards}' mode='Delete' delete='onDeleteCard' items='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" } }'>
-        <m:StandardListItem title="{store>name}" info="{store>items/length} items" infoState="Information"/>
-      </m:List>
-    </m:VBox>
-    <m:buttons>
-      <m:Button type='Emphasized' text='{i18n>submit}' press='onUpdateProject'/>
-      <m:Button type='Transparent' text='{i18n>close}' press='closeDialog'/>
-    </m:buttons>
-  </m:Dialog> -->
 </mvc:View>

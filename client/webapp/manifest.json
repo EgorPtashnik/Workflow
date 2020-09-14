@@ -84,6 +84,11 @@
           "name": "Settings",
           "pattern": "settings",
           "target": "Target_Settings"
+        },
+        {
+          "name": "DetailEdit",
+          "pattern": "project/{id}/edit",
+          "target": "Target_DetailEdit"
         }
       ],
       "targets": {
@@ -98,6 +103,10 @@
         "Target_Settings": {
           "viewType": "XML",
           "viewName": "Settings"
+        },
+        "Target_DetailEdit": {
+          "viewType": "XML",
+          "viewName": "DetailEdit"
         }
       }
     }

@@ -1,0 +1,69 @@
+<mvc:View
+  controllerName='client.controller.DetailEdit'
+  displayBlock='true'
+  xmlns='sap.m' xmlns:core='sap.ui.core'
+  xmlns:mvc='sap.ui.core.mvc'>
+  <Page showNavButton='true' navButtonPress='onNavBack' title='{store>/selectedProject/name} ({i18n>edit})'>
+    <headerContent>
+      <Button enabled='{state>/changed}' press='onSave' tooltip='{i18n>save}' icon='sap-icon://save'/>
+      <Button enabled='{state>/changed}' tooltip='{i18n>reset}' icon='sap-icon://reset' press='onReset'/>
+      <Button tooltip='{i18n>settings}' icon='sap-icon://action-settings' press='onGoToSettings'/>
+    </headerContent>
+    <content>
+      <VBox class='sapUiResponsiveMargin'>
+        <Panel>
+          <Label text='{i18n>projectName}:'/>
+          <Input change='onChangeProject' value='{state>/name}'/>
+          <Label text='{i18n>projectDesc}:'/>
+          <TextArea growing='true' change='onChangeProject' value='{state>/desc}' width='100%'/>
+          </Panel>
+        <Panel>
+          <Label text='{i18n>projectGit}:'/>
+          <Input change='onChangeProject' value='{state>/github}' submit='onPressSubmit' placeholder='{i18n>newProjectGit}'/>
+        </Panel>
+        <Panel>
+          <Label text='{i18n>avatar}:'/>
+          <HBox justifyContent='SpaceBetween' alignItems='Center'>
+            <Avatar backgroundColor='{path: "state>/iconColor", formatter: ".formatter.iconColor"}' fallbackIcon='{state>/icon}'/>
+            <VBox alignItems='End'>
+              <HBox alignItems='Center'>
+                <Label text='{i18n>color}:' class='sapUiTinyMarginEnd'/>
+                <Select change='onChangeProject' width='175px' selectedKey='{state>/iconColor}' >
+                  <core:Item key='1' text='1'/>
+                  <core:Item key='2' text='2'/>
+                  <core:Item key='3' text='3'/>
+                  <core:Item key='4' text='4'/>
+                  <core:Item key='5' text='5'/>
+                  <core:Item key='6' text='6'/>
+                  <core:Item key='7' text='7'/>
+                  <core:Item key='8' text='8'/>
+                  <core:Item key='9' text='9'/>
+                  <core:Item key='10' text='10'/>
+                  <core:Item key='11' text='11'/>
+                  <core:Item key='12' text='12'/>
+                  <core:Item key='13' text='13'/>
+                  <core:Item key='14' text='14'/>
+                </Select>
+              </HBox>
+              <HBox alignItems='Center'>
+                <Label text='{i18n>icon}:' class='sapUiTinyMarginEnd'/>
+                <Input change='onChangeProject' showValueHelp='true' valueHelpRequest='onGoToSapIcons' width='175px' value='{state>/icon}'/>
+              </HBox>
+            </VBox>
+          </HBox>
+        </Panel>
+        <Panel>
+          <Label text='{i18n>projectLists}:'/>
+          <List mode='Delete' delete='onDeleteCard' items='{state>/cards}'>
+            <CustomListItem>
+              <HBox alignItems='Center' justifyContent='SpaceBetween'>
+                <Input change='onChangeProject' class='input' value='{state>name}'/>
+                <Text text='{state>items/length}'/>
+              </HBox>
+            </CustomListItem>
+          </List>
+        </Panel>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>
