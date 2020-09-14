@@ -37,6 +37,13 @@ sap.ui.define([
         contentType: 'application/json',
       });
     },
+    updateCard(sCardId, oCard) {
+      return $.ajax(ROUTES.SERVER.CARDS + `/${sCardId}`, {
+        method: 'PUT',
+        data: JSON.stringify(oCard),
+        contentType: 'application/json'
+      });
+    },
     deleteCard(sCardId) {
       return $.ajax(ROUTES.SERVER.CARDS + `(${sCardId})`, {
         method: 'DELETE'

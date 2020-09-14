@@ -20,6 +20,7 @@ sap.ui.define([
         iconColor: 0,
         cards: [],
         deletedCardsIds: [],
+        updatedCards: [],
         changed: false
       });
       this.setModel(this.state, 'state');
@@ -35,7 +36,7 @@ sap.ui.define([
             ...oData,
             cards: oData.cards.map(card => ({...card}))
           }));
-          this.state.setData({ ...oData, deletedCardsIds: this.state.getProperty('/deletedCardsIds'), changed: false});
+          this.state.setData({ ...oData, deletedCardsIds: this.state.getProperty('/deletedCardsIds'), updatedCards: this.state.getProperty('/updatedCards'), changed: false});
           this.toggleBusy(false);
         })
         .fail(res => MessageBox.error(res.responseJSON.error.message, { onClose: () => this.navTo(ROUTES.HOME)}));
@@ -48,13 +49,14 @@ sap.ui.define([
         arr.push(item);
         return arr;
       }, [ ID ]));
+      this.state.setProperty('/updatedCards', this.state.getProperty('/updatedCards').filter(oCard => oCard.ID !== ID));
       this.onChangeProject();
       this.toggleBusy(false);
     },
     onSave() {
       this.toggleBusy(true);
       const {
-        name, desc, github, deletedCardsIds, icon, iconColor
+        name, desc, github, deletedCardsIds, icon, iconColor, updatedCards
       } = this.state.getData();
       const aPromises = [];
       deletedCardsIds.forEach(sCardId => {
@@ -63,6 +65,16 @@ sap.ui.define([
         HttpService.deleteCard(sCardId)
         .done(() => {
           this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));
+          deffered.resolve();
+        })
+        .fail(res => this.showErrorMessage(res.responseJSON.error.message))
+      });
+      updatedCards.forEach(oCard => {
+        const deffered = $.Deferred();
+        aPromises.push(deffered);
+        HttpService.updateCard(oCard.ID, { name: oCard.name })
+        .done(() => {
+          this.showSuccessMessage(this.getResourceBundle().getText('updateItemSuccess'));
           deffered.resolve();
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message))
@@ -79,6 +91,7 @@ sap.ui.define([
               iconColor: 0,
               cards: [],
               deletedCardsIds: [],
+              updatedCards: [],
               changed: false
             });
             this.navTo(ROUTES.DETAIL, { id: this.sProjectId })
@@ -95,6 +108,14 @@ sap.ui.define([
         deletedCardsIds: [],
       });
       this.showSuccessMessage(this.getResourceBundle().getText('updateProjectSuccess'));
+    },
+    onChangeCardName(oEvent, sCardId) {
+      const sNewName = oEvent.getSource().getValue();
+      this.state.setProperty('/updatedCards', this.state.getProperty('/updatedCards').reduce((arr, item) => {
+        arr.push(item);
+        return arr;
+      }, [{ID: sCardId, name: sNewName}]));
+      this.onChangeProject();
     },
     onChangeProject() {
       if (!this.state.getProperty('/changed')) this.state.setProperty('/changed', true);

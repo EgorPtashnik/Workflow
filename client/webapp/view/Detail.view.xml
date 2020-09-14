@@ -16,10 +16,10 @@
               <List noDataText='{i18n>noTasks}' delete='onDeleteTask' itemPress='onChangeListItemStatus' items='{path: "store>items", templateShareable: "false", sorter: { path: "createdAt" }}'>
                 <headerToolbar>
                   <Toolbar>
-                    <VBox visible='{device>/support/touch}'>
+                    <HBox width='100%' justifyContent='SpaceBetween' visible='{device>/support/touch}'>
                       <Text text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
                       <Text text='{i18n>modified}: {path: "store>modifiedAt", formatter: ".formatter.stringByDate"}'/>
-                    </VBox>
+                      </HBox>
                     <VBox visible='{=!${device>/support/touch}}'>
                       <Title wrapping='true' text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
                       <Title wrapping='true' text='{i18n>modified}: {path: "store>modifiedAt", formatter: ".formatter.stringByDate"}'/>

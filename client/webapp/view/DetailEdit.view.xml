@@ -57,7 +57,7 @@
           <List mode='Delete' delete='onDeleteCard' items='{state>/cards}'>
             <CustomListItem>
               <HBox alignItems='Center' justifyContent='SpaceBetween'>
-                <Input change='onChangeProject' class='input' value='{state>name}'/>
+                <Input change='onChangeCardName($event, ${state>ID})' class='input' value='{state>name}'/>
                 <Text text='{state>items/length}'/>
               </HBox>
             </CustomListItem>
