@@ -16,8 +16,14 @@
               <List noDataText='{i18n>noTasks}' delete='onDeleteTask' itemPress='onChangeListItemStatus' items='{path: "store>items", templateShareable: "false", sorter: { path: "createdAt" }}'>
                 <headerToolbar>
                   <Toolbar>
-                    <Text visible='{device>/support/touch}' text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
-                    <Title wrapping='true' visible='{=!${device>/support/touch}}' text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
+                    <VBox visible='{device>/support/touch}'>
+                      <Text text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
+                      <Text text='{i18n>modified}: {path: "store>modifiedAt", formatter: ".formatter.stringByDate"}'/>
+                    </VBox>
+                    <VBox visible='{=!${device>/support/touch}}'>
+                      <Title wrapping='true' text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
+                      <Title wrapping='true' text='{i18n>modified}: {path: "store>modifiedAt", formatter: ".formatter.stringByDate"}'/>
+                    </VBox>
                     <ToolbarSpacer/>
                     <Input type='Text' visible='{=!${device>/support/touch}}' class='input' placeholder='{i18n>newTask}' submit='onCreateTask($event, ${store>ID})'/>
                     <ToggleButton visible='{=!${device>/support/touch}}' type='Reject' icon='sap-icon://delete' press='onChangeListMode'/>
