@@ -106,6 +106,7 @@ sap.ui.define([
         cards: oProjectData.cards.map(card => ({...card})),
         changed: false,
         deletedCardsIds: [],
+        updatedCards: []
       });
       this.showSuccessMessage(this.getResourceBundle().getText('updateProjectSuccess'));
     },
