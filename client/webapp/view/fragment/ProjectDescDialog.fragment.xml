@@ -1,0 +1,9 @@
+<core:FragmentDefinition xmlns:core='sap.ui.core'
+  xmlns='sap.m'>
+  <Dialog stretch='true' type='Message' state='Information' title='{i18n>projectDesc}'>
+    <Text text='{store>/selectedProject/desc}'/>
+    <endButton>
+      <Button text='{i18n>close}' press='onCloseDialog'/>
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

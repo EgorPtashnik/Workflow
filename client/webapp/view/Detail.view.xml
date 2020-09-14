@@ -1,10 +1,11 @@
 <mvc:View controllerName='client.controller.Detail' displayBlock='true'
   xmlns='sap.m' xmlns:core='sap.ui.core' xmlns:c='client.custom'
   xmlns:mvc='sap.ui.core.mvc'>
-  <Page showNavButton='true' navButtonPress='onNavBack' title='{store>/selectedProject/name}'>
+  <Page floatingFooter='true' showNavButton='true' navButtonPress='onNavBack' title='{store>/selectedProject/name}'>
     <headerContent>
       <Button tooltip='{i18n>createNewList}' press='openCreateCardPopover' icon='sap-icon://add'/>
       <Button tooltip='{i18n>edit}' icon='sap-icon://edit' press='onEditProject'/>
+      <Button tooltip='{i18n>projectDesc}' press='onShowProjectDesc' icon='sap-icon://hint'/>
       <Button tooltip='{i18n>settings}' icon='sap-icon://action-settings' press='onGoToSettings'/>
     </headerContent>
     <content>

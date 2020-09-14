@@ -119,6 +119,23 @@ sap.ui.define([
     onEditProject() {
       this.toggleBusy(true);
       this.navTo(ROUTES.DETAIL_EDIT, { id: this.sProjectId});
+    },
+    onShowProjectDesc() {
+      if (!this._oProjectDescDialog) {
+        Fragment.load({
+          name: 'client.view.fragment.ProjectDescDialog',
+          controller: this
+        }).then(oDialog => {
+          this._oProjectDescDialog = oDialog;
+          this.getView().addDependent(this._oProjectDescDialog);
+          this._oProjectDescDialog.open();
+        });
+      } else {
+        this._oProjectDescDialog.open();
+      }
+    },
+    onCloseDialog() {
+      this._oProjectDescDialog.close();
     }
   });
 });
