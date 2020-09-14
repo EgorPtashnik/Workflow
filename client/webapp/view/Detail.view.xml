@@ -13,7 +13,7 @@
           <IconTabFilter icon='{store>icon}' text='{store>name}' count='{store>items/length}'>
             <ScrollContainer horizontal='false' vertical='true' width='100%' height='{=${device>/support/touch}? "calc(100vh - 161px)" : "calc(100vh - 161px)"}'>
               <c:InputWithButton placeholder='{i18n>newTask}' visible='{device>/support/touch}' valueHelpRequest='onCreateTask($event, ${store>ID})'/>
-              <List noDataText='{i18n>noTasks}' delete='onDeleteTask' itemPress='onChangeListItemStatus' items='{path: "store>items", templateShareable: "false", sorter: { path: "createdAt" }}'>
+              <List noDataText='{i18n>noTasks}' delete='onDeleteTask' itemPress='onChangeListItemStatus' items='{path: "store>items", templateShareable: "false", sorter: { path: "done" }}'>
                 <headerToolbar>
                   <Toolbar>
                     <HBox width='100%' justifyContent='SpaceBetween' visible='{device>/support/touch}'>
