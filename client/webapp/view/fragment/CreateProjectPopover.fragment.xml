@@ -1,10 +1,40 @@
-<core:FragmentDefinition xmlns:core='sap.ui.core' xmlns='sap.m'>
+<core:FragmentDefinition xmlns:core='sap.ui.core'
+  xmlns='sap.m'>
   <ResponsivePopover contentWidth='450px' title='{i18n>createNewProject}' placement='Left'>
     <VBox class='sapUiTinyMargin'>
       <Label text='{i18n>projectName}:'/>
       <Input value='{state>/newProjectName}' submit='onPressSubmit' placeholder='{i18n>newProjectName}'/>
       <Label text='{i18n>projectGit}:'/>
       <Input value='{state>/newProjectGit}' submit='onPressSubmit' placeholder='{i18n>newProjectGit}'/>
+      <Label text='{i18n>avatar}:'/>
+      <HBox justifyContent='SpaceBetween' alignItems='Center'>
+        <Avatar backgroundColor='{path: "state>/newProjectIconColor", formatter: ".formatter.iconColor"}' fallbackIcon='{state>/newProjectIcon}'/>
+        <VBox alignItems='End'>
+          <HBox alignItems='Center'>
+            <Label text='{i18n>color}:' class='sapUiTinyMarginEnd'/>
+            <Select width='175px' selectedKey='{state>/newProjectIconColor}' >
+              <core:Item key='1' text='1'/>
+              <core:Item key='2' text='2'/>
+              <core:Item key='3' text='3'/>
+              <core:Item key='4' text='4'/>
+              <core:Item key='5' text='5'/>
+              <core:Item key='6' text='6'/>
+              <core:Item key='7' text='7'/>
+              <core:Item key='8' text='8'/>
+              <core:Item key='9' text='9'/>
+              <core:Item key='10' text='10'/>
+              <core:Item key='11' text='11'/>
+              <core:Item key='12' text='12'/>
+              <core:Item key='13' text='13'/>
+              <core:Item key='14' text='14'/>
+            </Select>
+          </HBox>
+          <HBox alignItems='Center'>
+            <Label text='{i18n>icon}:' class='sapUiTinyMarginEnd'/>
+            <Input showValueHelp='true' valueHelpRequest='onGoToSapIcons' width='175px' value='{state>/newProjectIcon}'/>
+          </HBox>
+        </VBox>
+      </HBox>
       <Label text='{i18n>projectDesc}:'/>
       <TextArea width='100%' class='min-height' value='{state>/newProjectDesc}' placeholder='{i18n>newProjectDesc}'/>
       <Button width='100%' type='Emphasized' text='{i18n>submit}' press='onPressSubmit'/>

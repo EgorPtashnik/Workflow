@@ -16,7 +16,9 @@ sap.ui.define([
       this.state = new JSONModel({
         newProjectName: '',
         newProjectDesc: '',
-        newProejctGit: '',
+        newProjectGit: '',
+        newProjectIcon: 'sap-icon://legend',
+        newProjectIconColor: 1,
         projectNameFilter: '',
         deleteMode: false
       });
@@ -69,12 +71,14 @@ sap.ui.define([
       const sNewProjectName = this.state.getProperty('/newProjectName');
       const sNewProjectDesc = this.state.getProperty('/newProjectDesc');
       const sNewProjectGit = this.state.getProperty('/newProjectGit');
+      const sNewProjectIcon = this.state.getProperty('/newProjectIcon');
+      const iNewProjectIconColor = +this.state.getProperty('/newProjectIconColor');
       if (!sNewProjectName || !sNewProjectDesc) {
         this.showErrorMessage(this.getResourceBundle().getText('createProjectError'));
         this.toggleBusy(false);
         return;
       };
-      HttpService.createProject({ name: sNewProjectName, desc: sNewProjectDesc, github: sNewProjectGit })
+      HttpService.createProject({ name: sNewProjectName, desc: sNewProjectDesc, github: sNewProjectGit, icon: sNewProjectIcon, iconColor: iNewProjectIconColor })
         .done(oData => {
           this.showSuccessMessage(this.getResourceBundle().getText('createProjectSuccess'));
           this.dispatch(A.addProject({...oData}, this.getStore().getData()));
@@ -107,10 +111,6 @@ sap.ui.define([
       this.toggleBusy(true);
       const { ID } = oEvent.getSource().getBindingContext('store').getObject();
       this.navTo(ROUTES.DETAIL, {id: ID});
-    },
-    onGoToSettings() {
-      this.toggleBusy(true);
-      this.navTo(ROUTES.SETTINGS);
     }
   });
 });

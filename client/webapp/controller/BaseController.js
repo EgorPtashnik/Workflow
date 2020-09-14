@@ -72,8 +72,14 @@ sap.ui.define([
       return sTheme === 'sap_fiori_3'? bDarkMode? 'sap_fiori_3_dark' : 'sap_fiori_3' :
         sTheme === 'sap_belize'? bDarkMode? 'sap_belize_plus' : 'sap_belize' :
         sTheme === 'sap_fiori_3_hcw'? bDarkMode? 'sap_fiori_3_hcb' : 'sap_fiori_3_hcw' : '';
+    },
+    onGoToSettings() {
+      this.toggleBusy(true);
+      this.navTo(ROUTES.SETTINGS);
+    },
+    onGoToSapIcons() {
+      window.open(ROUTES.SAP_ICONS, '_blank');
     }
-
   });
 
 });

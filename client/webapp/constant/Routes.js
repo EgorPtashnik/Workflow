@@ -7,6 +7,8 @@ sap.ui.define([
     DETAIL: 'Detail',
     SETTINGS: 'Settings',
 
+    SAP_ICONS: 'https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons',
+
     SERVER: {
       PROJECTS: '/odata/Projects',
       CARDS: '/odata/Cards',

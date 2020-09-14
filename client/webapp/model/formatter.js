@@ -5,23 +5,31 @@ sap.ui.define([
 
   return {
     iconColor(iColor) {
-      switch(iColor) {
-        case 1: return 'Accent1'; break;
-        case 2: return 'Accent2'; break;
-        case 3: return 'Accent3'; break;
-        case 4: return 'Accent4'; break;
-        case 5: return 'Accent5'; break;
-        case 6: return 'Accent6'; break;
-        case 7: return 'Accent7'; break;
-        case 8: return 'Accent8'; break;
-        case 9: return 'Accent9'; break;
-        case 10: return 'Accent10'; break;
-        case 11: return 'Placeholder'; break;
-        case 12: return 'Random'; break;
-        case 13: return 'TileIcon'; break;
-        case 14: return 'Transparent'; break;
+      switch(iColor.toString()) {
+        case '1': return 'Accent1';
+        case '2': return 'Accent2';
+        case '3': return 'Accent3';
+        case '4': return 'Accent4';
+        case '5': return 'Accent5';
+        case '6': return 'Accent6';
+        case '7': return 'Accent7';
+        case '8': return 'Accent8';
+        case '9': return 'Accent9';
+        case '10': return 'Accent10';
+        case '11': return 'Placeholder';
+        case '12': return 'Random';
+        case '13': return 'TileIcon';
+        case '14': return 'Transparent';
         default: return 'TileIcon';
       };
+    },
+
+    stringByDate(sDate) {
+      const oDate = new Date(sDate);
+      const sYear = oDate.getFullYear();
+      const sMonth = oDate.getMonth() + 1;
+      const sDay = oDate.getDate();
+      return `${sDay}.${sMonth}.${sYear}`;
     }
   }
 })

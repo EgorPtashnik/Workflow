@@ -1,44 +1,47 @@
-<mvc:View
-  controllerName='client.controller.Detail'
-  displayBlock='true'
-  xmlns:m='sap.m'
-  xmlns='sap.uxap'
+<mvc:View controllerName='client.controller.Detail' displayBlock='true'
+  xmlns='sap.m' xmlns:core='sap.ui.core' xmlns:c='client.custom'
   xmlns:mvc='sap.ui.core.mvc'>
-  <ObjectPageLayout sections='{path: "store>/selectedProject/cards", sorter: { path: "createdAt" }}'>
-    <headerTitle>
-      <ObjectPageHeader objectTitle='{store>/selectedProject/name}'
-        objectSubtitle='{store>/selectedProject/desc}'
-        objectImageURI='resources/img/project.jpg'>
-        <actions>
-          <ObjectPageHeaderActionButton type='Emphasized' press='openCreateCardDialog' hideText='false' hideIcon='true' text='{i18n>createNewCard}'/>
-          <ObjectPageHeaderActionButton hideText='false' hideIcon='true' text='{i18n>edit}' press='openEditProjectDialog'/>
-          <ObjectPageHeaderActionButton type='Transparent' hideText='false' hideIcon='true' text='{i18n>projects}' press='onGoProjects'/>
-        </actions>
-      </ObjectPageHeader>
-    </headerTitle>
+  <Page showNavButton='true' navButtonPress='onNavBack' title='{store>/selectedProject/name}'>
+    <headerContent>
+      <Button tooltip='{i18n>createNewList}' press='openCreateCardPopover' icon='sap-icon://add'/>
+      <Button tooltip='{i18n>settings}' icon='sap-icon://action-settings' press='onGoToSettings'/>
+    </headerContent>
+    <content>
+      <IconTabBar headerMode='Inline' items='{store>/selectedProject/cards}'>
+        <items>
+          <IconTabFilter icon='{store>icon}' text='{store>name}' count='{store>items/length}'>
+            <ScrollContainer horizontal='false' vertical='true' width='100%' height='{=${device>/support/touch}? "calc(100vh - 161px)" : "calc(100vh - 161px)"}'>
+              <c:InputWithButton visible='{device>/support/touch}' valueHelpRequest='onCreateTask($event, ${store>ID})'/>
+              <List delete='onDeleteTask' itemPress='onChangeListItemStatus' items='{path: "store>items", templateShareable: "false"}'>
+                <headerToolbar>
+                  <Toolbar>
+                    <Text visible='{device>/support/touch}' text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
+                    <Title wrapping='true' visible='{=!${device>/support/touch}}' text='{i18n>created}: {path: "store>createdAt", formatter: ".formatter.stringByDate"}'/>
+                    <ToolbarSpacer/>
+                    <Input type='Text' visible='{=!${device>/support/touch}}' class='input' placeholder='{i18n>newTask}' submit='onCreateTask($event, ${store>ID})'/>
+                    <ToggleButton visible='{=!${device>/support/touch}}' type='Reject' icon='sap-icon://delete' press='onChangeListMode'/>
+                  </Toolbar>
+                </headerToolbar>
+                <CustomListItem type='Active' highlight='{=${store>done} === 0? "Error" : "Success"}'>
+                  <HBox class='sapUiSmallMargin' alignItems='Center' justifyContent='{=${device>/support/touch}? "Start" : "SpaceBetween"}'>
+                    <core:Icon visible='{device>/support/touch}' class='sapUiTinyMarginEnd' color='{=${store>done}? "Positive" : "Negative"}' src='{=${store>done}? "sap-icon://message-success" : "sap-icon://message-error"}'/>
+                    <Text wrapping='true' text='{store>name}' visible='{device>/support/touch}'/>
+                    <Title wrapping='true' text='{store>name}' visible='{=!${device>/support/touch}}'/>
+                    <core:Icon color='{=${store>done}? "Positive" : "Negative"}' visible='{=!${device>/support/touch}}' src='{=${store>done}? "sap-icon://message-success" : "sap-icon://message-error"}'/>
+                  </HBox>
+                </CustomListItem>
+                <swipeContent>
+                  <Button type='Transparent' icon='sap-icon://decline' press='onDeleteTask'/>
+                </swipeContent>
+              </List>
+            </ScrollContainer>
+          </IconTabFilter>
+        </items>
+      </IconTabBar>
+    </content>
+  </Page>
 
-    <sections>
-      <ObjectPageSection titleUppercase='false' title='{store>name}'>
-        <ObjectPageSubSection>
-          <m:VBox>
-            <m:List noDataText='{i18n>noTasks}' itemPress='onChangeListItemStatus' delete='onDeleteTask' items='{path: "store>items", templateShareable: "false"}'>
-              <m:headerToolbar>
-                <m:Toolbar>
-                  <m:Input class='input' placeholder='{i18n>newTask}' submit='onCreateTask($event, ${store>ID})'/>
-                  <m:ToolbarSpacer/>
-                  <m:ToggleButton type='Reject' icon='sap-icon://delete' press='onChangeListMode'/>
-                </m:Toolbar>
-              </m:headerToolbar>
-              <m:StandardListItem wrapping='true' type='Active' title='{store>name}' highlight='{=${store>done} === 0? "Error" : "Success"}'
-                info='{=${store>done} === 0? "In Progress" : "Done"}' infoState='{=${store>done} === 0? "Error" : "Success"}'/>
-            </m:List>
-          </m:VBox>
-        </ObjectPageSubSection>
-      </ObjectPageSection>
-    </sections>
-  </ObjectPageLayout>
-
-  <m:Dialog title='{i18n>createNewCard}' id='idCreateCardDialog'>
+  <!-- <m:Dialog title='{i18n>createNewCard}' id='idCreateCardDialog'>
     <m:VBox class='sapUiTinyMargin'>
       <m:Label text='{i18n>newCardName}'/>
       <m:Input value='{state>/newCardName}' submit='onCreateCard'/>
@@ -63,5 +66,5 @@
       <m:Button type='Emphasized' text='{i18n>submit}' press='onUpdateProject'/>
       <m:Button type='Transparent' text='{i18n>close}' press='closeDialog'/>
     </m:buttons>
-  </m:Dialog>
+  </m:Dialog> -->
 </mvc:View>

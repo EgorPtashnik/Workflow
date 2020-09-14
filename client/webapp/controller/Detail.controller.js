@@ -2,10 +2,11 @@ sap.ui.define([
   'client/controller/BaseController',
   'sap/m/MessageBox',
   'sap/ui/model/json/JSONModel',
+  'sap/ui/core/Fragment',
   'client/constant/Routes',
   'client/service/Http.service',
   'client/model/actions'
-], function(BaseController, MessageBox, JSONModel,
+], function(BaseController, MessageBox, JSONModel, Fragment,
             ROUTES, HttpService, A) {
   "use strict";
 
@@ -14,6 +15,7 @@ sap.ui.define([
       BaseController.prototype.onInit.apply(this, arguments);
       this.state = new JSONModel({
         newCardName: '',
+        newCardIcon: 'sap-icon://workflow-tasks'
       });
       this.setModel(this.state, 'state');
 
@@ -45,10 +47,20 @@ sap.ui.define([
     closeDialog(oEvent) {
       oEvent.getSource().getParent().close();
     },
-    openCreateCardDialog() {
-      if (!this.createCardDialog) this.createCardDialog = this.byId('idCreateCardDialog');
-      this.createCardDialog.addStyleClass(this._getDensityClass());
-      this.createCardDialog.open();
+    openCreateCardPopover(oEvent) {
+      const oButton = oEvent.getSource();
+      if (!this._oCreateCardPopover) {
+        Fragment.load({
+          name: 'client.view.fragment.CreateCardPopover',
+          controller: this
+        }).then(oPopover => {
+          this._oCreateCardPopover = oPopover;
+          this.getView().addDependent(this._oCreateCardPopover);
+          this._oCreateCardPopover.openBy(oButton);
+        });
+      } else {
+        this._oCreateCardPopover.openBy(oButton);
+      }
     },
     openEditProjectDialog() {
       if (!this.editProjectDialog) this.editProjectDialog = this.byId('idEditProjectDialog');
@@ -57,17 +69,19 @@ sap.ui.define([
     onCreateCard(oEvent) {
       this.toggleBusy(true);
       const sNewCardName = this.state.getProperty('/newCardName');
+      const sNewCardIcon = this.state.getProperty('/newCardIcon');
       this.state.setProperty('/newCardName', '');
+      this.state.setProperty('/newCardIcon', 'sap-icon://workflow-tasks');
       if (!sNewCardName) {
         this.showErrorMessage(this.getResourceBundle().getText('cardNameError'));
         this.toggleBusy(false);
         return;
       }
-      HttpService.createCard({ name: sNewCardName, project_ID: this.sProjectId })
+      HttpService.createCard({ name: sNewCardName, icon: sNewCardIcon, project_ID: this.sProjectId })
         .done(oData => {
           this.showSuccessMessage(this.getResourceBundle().getText('createItemSuccess'));
           this.dispatch(A.addCard(oData, this.getStore().getData()));
-          this.createCardDialog.close();
+          this._oCreateCardPopover.close();
           this.toggleBusy(false);
         })
         .fail(res => this.showErrorMessage(res.responseJSON.error.message));
@@ -80,7 +94,10 @@ sap.ui.define([
       this.toggleBusy(true);
       const oInput = oEvent.getSource();
       const sNewTaskName = oInput.getValue();
-      if (!sNewTaskName) return;
+      if (!sNewTaskName) {
+        toggleBusy(false);
+        return;
+      };
       HttpService.createCardItem({ name: sNewTaskName, card_ID: sCardID, done: 0 })
         .done(oData => {
           this.showSuccessMessage(this.getResourceBundle().getText('createItemSuccess'));
@@ -92,7 +109,12 @@ sap.ui.define([
     },
     onDeleteTask(oEvent) {
       this.toggleBusy(true);
-      const { ID, card_ID } = oEvent.getParameter('listItem').getBindingContext('store').getObject();
+      let oCardListItem = oEvent.getParameter('listItem');
+      if (!oCardListItem) {
+        const oList = oEvent.getSource().getParent();
+        oCardListItem = oList.getSwipedItem();
+      };
+      const { ID, card_ID } = oCardListItem.getBindingContext('store').getObject();
       HttpService.deleteCardItem(ID)
         .done(() => {
           this.showSuccessMessage(this.getResourceBundle().getText('deleteItemSuccess'));

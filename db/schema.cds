@@ -22,7 +22,6 @@ entity Card: cuid, managed {
 
 entity CardItem: cuid {
   name: String;
-  icon: String default 'sap-icon://message-error';
   done: Integer;
   card: Association to Card;
 }

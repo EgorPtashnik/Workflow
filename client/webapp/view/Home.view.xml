@@ -14,38 +14,34 @@
           <core:Item text='{store>name}'/>
         </ComboBox>
       </VBox>
-      <VBox class='sapUiTinyMargin'>
-        <List items='{ path: "store>/projects", sorter: { path: "createdAt" } }'
-          noDataText='{i18n>noProjects}'
-          delete='onDelete'
-          mode='{=${state>/deleteMode}? "Delete" : "None"}'>
-          <headerToolbar>
-            <OverflowToolbar>
-              <Title text='{i18n>projects}: {store>/projects/length}'/>
-              <ToolbarSpacer/>
-              <ComboBox visible='{=!${device>/support/touch}}' placeholder='{i18n>search}' items='{store>/projects}' width='15rem' value='{state>/projectNameFilter}'>
-                <core:Item text='{store>name}'/>
-              </ComboBox>
-              <ToggleButton visible='{=!${device>/support/touch}}' pressed='{state>/deleteMode}' type='Reject' icon='sap-icon://delete'/>
-            </OverflowToolbar>
-          </headerToolbar>
-          <CustomListItem type='{=${device>/support/touch}? "Active" : "Navigation"}' press='onGoToProject' visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
-            <VBox class='sapUiTinyMargin'>
-              <HBox alignItems='Center'>
-                <Avatar backgroundColor='{path: "store>iconColor", formatter: ".formatter.iconColor"}' fallbackIcon='{store>icon}'/>
-                <VBox class='sapUiTinyMarginBegin'>
-                  <Title text='{store>name}' titleStyle='H4'/>
-                  <Link visible='{=!!${store>github}}' emphasized='true' target='_blank' text='{i18n>goGitHub}' href='{store>github}'/>
-                </VBox>
-              </HBox>
-              <Text text='{store>desc}'/>
-            </VBox>
-          </CustomListItem>
-          <swipeContent>
-            <Button type='Transparent' icon='sap-icon://decline' press='onDelete'/>
-          </swipeContent>
-        </List>
-      </VBox>
+      <List items='{ path: "store>/projects", sorter: { path: "createdAt" } }' noDataText='{i18n>noProjects}' delete='onDelete' mode='{=${state>/deleteMode}? "Delete" : "None"}'>
+        <headerToolbar>
+          <OverflowToolbar>
+            <Title text='{i18n>projects}: {store>/projects/length}'/>
+            <ToolbarSpacer/>
+            <ComboBox visible='{=!${device>/support/touch}}' placeholder='{i18n>search}' items='{store>/projects}' width='15rem' value='{state>/projectNameFilter}'>
+              <core:Item text='{store>name}'/>
+            </ComboBox>
+            <ToggleButton visible='{=!${device>/support/touch}}' pressed='{state>/deleteMode}' type='Reject' icon='sap-icon://delete'/>
+          </OverflowToolbar>
+        </headerToolbar>
+        <CustomListItem type='{=${device>/support/touch}? "Active" : "Navigation"}' press='onGoToProject' visible='{=${state>/projectNameFilter}? ${store>name}.toLowerCase().includes(${state>/projectNameFilter}.toLowerCase())? true : false : true}'>
+          <VBox class='sapUiTinyMargin'>
+            <HBox alignItems='Center'>
+              <Avatar backgroundColor='{path: "store>iconColor", formatter: ".formatter.iconColor"}' fallbackIcon='{store>icon}'/>
+              <VBox class='sapUiTinyMarginBegin'>
+                <Title text='{store>name}' titleStyle='H4'/>
+                <Link visible='{=!!${store>github}}' emphasized='true' target='_blank' text='{i18n>goGitHub}' href='{store>github}'/>
+              </VBox>
+            </HBox>
+            <Label text='{i18n>projectDesc}:'/>
+            <Text text='{store>desc}'/>
+          </VBox>
+        </CustomListItem>
+        <swipeContent>
+          <Button type='Transparent' icon='sap-icon://decline' press='onDelete'/>
+        </swipeContent>
+      </List>
     </content>
   </Page>
 </mvc:View>
