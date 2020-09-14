@@ -4,14 +4,15 @@
   <Page showNavButton='true' navButtonPress='onNavBack' title='{store>/selectedProject/name}'>
     <headerContent>
       <Button tooltip='{i18n>createNewList}' press='openCreateCardPopover' icon='sap-icon://add'/>
+      <Button icon='sap-icon://edit'/>
       <Button tooltip='{i18n>settings}' icon='sap-icon://action-settings' press='onGoToSettings'/>
     </headerContent>
     <content>
-      <IconTabBar headerMode='Inline' items='{store>/selectedProject/cards}'>
+      <IconTabBar enableTabReordering='true' tabDensityMode='{=${device>/support/touch}? "Cozy" : "Compact"}' items='{store>/selectedProject/cards}'>
         <items>
           <IconTabFilter icon='{store>icon}' text='{store>name}' count='{store>items/length}'>
             <ScrollContainer horizontal='false' vertical='true' width='100%' height='{=${device>/support/touch}? "calc(100vh - 161px)" : "calc(100vh - 161px)"}'>
-              <c:InputWithButton visible='{device>/support/touch}' valueHelpRequest='onCreateTask($event, ${store>ID})'/>
+              <c:InputWithButton placeholder='{i18n>newTask}' visible='{device>/support/touch}' valueHelpRequest='onCreateTask($event, ${store>ID})'/>
               <List delete='onDeleteTask' itemPress='onChangeListItemStatus' items='{path: "store>items", templateShareable: "false"}'>
                 <headerToolbar>
                   <Toolbar>
