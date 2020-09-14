@@ -20,7 +20,7 @@ entity Card: cuid, managed {
   items: Composition of many CardItem on items.card = $self;
 }
 
-entity CardItem: cuid {
+entity CardItem: cuid, managed {
   name: String;
   done: Integer;
   card: Association to Card;
