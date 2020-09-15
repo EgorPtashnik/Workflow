@@ -32,6 +32,12 @@
             <Switch state='{store>/darkMode}' change='onToggleDarkMode' customTextOff=' ' customTextOn=' '/>
           </HBox>
         </CustomListItem>
+        <CustomListItem>
+          <HBox class='sapUiTinyMargin' alignItems='Center' justifyContent='SpaceBetween'>
+            <Label text='{i18n>backupData}:'/>
+            <Button type='Emphasized' text='{i18n>download}'/>
+          </HBox>
+        </CustomListItem>
       </items>
     </List>
   </Page>

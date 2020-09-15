@@ -13,7 +13,8 @@ sap.ui.define([
     SERVER: {
       PROJECTS: '/odata/Projects',
       CARDS: '/odata/Cards',
-      CARD_ITEMS: '/odata/CardItems'
+      CARD_ITEMS: '/odata/CardItems',
+      BACKUP: '/backup'
     }
   };
 });
