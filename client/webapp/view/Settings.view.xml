@@ -35,7 +35,7 @@
         <CustomListItem>
           <HBox class='sapUiTinyMargin' alignItems='Center' justifyContent='SpaceBetween'>
             <Label text='{i18n>backupData}:'/>
-            <Button type='Emphasized' text='{i18n>download}'/>
+            <Button type='Emphasized' text='{i18n>download}' press='onBackupData'/>
           </HBox>
         </CustomListItem>
       </items>

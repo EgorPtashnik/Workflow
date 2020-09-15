@@ -68,6 +68,12 @@ sap.ui.define([
       return $.ajax(ROUTES.SERVER.CARD_ITEMS + `(${sCardItemId})`, {
         method: 'DELETE'
       });
+    },
+
+    backupData() {
+      return $.ajax(ROUTES.SERVER.BACKUP, {
+        method: 'GET'
+      });
     }
   }
 })

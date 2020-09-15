@@ -1,9 +1,10 @@
 sap.ui.define([
   'client/controller/BaseController',
 
-  'client/constant/Routes'
+  'client/constant/Routes',
+  'client/service/Http.service'
 ], function(BaseController,
-            ROUTES) {
+            ROUTES, HttpService) {
   "use strict";
 
   return BaseController.extend('client.controller.Settings', {
@@ -34,6 +35,9 @@ sap.ui.define([
       const sLocale = oEvent.getParameter('selectedItem').getKey();
       localStorage.setItem('locale', sLocale);
       sap.ui.getCore().getConfiguration().setLanguage(sLocale);
+    },
+    onBackupData() {
+      window.open('/backup');
     }
 
   });

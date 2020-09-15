@@ -6,6 +6,8 @@
   "scripts": {
     "build:cds": "cds build/all --clean",
     "build:mta": "mbt build",
+    "deploy:cf": "cf deploy mta_archives/egor.ptashnik.workflow_$npm_package_version.mtar",
+    "deploy:prod": "run-s build:mta deploy:cf",
     "deploy:cds": "cds deploy --to sqlite",
     "start": "node index.js",
     "start:live": "nodemon index.js --open"
