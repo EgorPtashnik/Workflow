@@ -7,8 +7,8 @@ modules:
     type: nodejs
     path: /
     parameters:
-      disk-quota: 512M
-      memory: 512M
+      disk-quota: 1024M
+      memory: 1024M
       instances: 1
     build-parameters:
       ignore: ["node_modules/"]
