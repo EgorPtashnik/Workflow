@@ -127,6 +127,7 @@ sap.ui.define([
           controller: this
         }).then(oDialog => {
           this._oProjectDescDialog = oDialog;
+          this._oProjectDescDialog.addStyleClass(this._getDensityClass());
           this.getView().addDependent(this._oProjectDescDialog);
           this._oProjectDescDialog.open();
         });

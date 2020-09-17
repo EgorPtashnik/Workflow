@@ -1,9 +1,12 @@
 <core:FragmentDefinition xmlns:core='sap.ui.core'
   xmlns='sap.m'>
-  <Dialog stretch='true' type='Message' state='Information' title='{i18n>projectDesc}'>
-    <Text text='{store>/selectedProject/desc}'/>
-    <endButton>
+  <Dialog stretch='{device>/support/touch}' type='Message' state='Information' title='{i18n>projectDesc}'>
+    <VBox>
+      <Text text='{store>/selectedProject/desc}'/>
+      <Link visible='{=!!${store>/selectedProject/github}}' emphasized='true' target='_blank' text='{i18n>goGitHub}' href='{store>/selectedProject/github}'/>
+    </VBox>
+    <buttons>
       <Button text='{i18n>close}' press='onCloseDialog'/>
-    </endButton>
+    </buttons>
   </Dialog>
 </core:FragmentDefinition>
