@@ -76,7 +76,7 @@ sap.ui.define([
       const oInput = oEvent.getSource();
       const sNewTaskName = oInput.getValue();
       if (!sNewTaskName) {
-        toggleBusy(false);
+        this.toggleBusy(false);
         return;
       };
       HttpService.createCardItem({ name: sNewTaskName, card_ID: sCardID, done: 0 })
