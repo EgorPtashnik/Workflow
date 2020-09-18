@@ -36,7 +36,7 @@
                     <VBox>
                       <Text wrapping='true' text='{store>name}' visible='{device>/support/touch}'/>
                       <Title wrapping='true' text='{store>name}' visible='{=!${device>/support/touch}}'/>
-                      <Label text='{path: "store>modifiedAt", formatter: ".formatter.stringByDate"}'/>
+                      <Label text='{path: "store>createdAt", formatter: ".formatter.stringByDate"} - {path: "store>modifiedAt", formatter: ".formatter.stringByDate"}'/>
                     </VBox>
                     <core:Icon color='{=${store>done}? "Positive" : "Negative"}' visible='{=!${device>/support/touch}}' src='{=${store>done}? "sap-icon://message-success" : "sap-icon://message-error"}'/>
                   </HBox>
