@@ -52,7 +52,6 @@ sap.ui.define([
     },
     onPressCreate(oEvent) {
       const oButton = oEvent.getSource();
-      const bIsTouchDevice = this.oDeviceModel.getProperty('/support/touch');
       if (!this._oPopover) {
         Fragment.load({
           name: 'client.view.fragment.CreateProjectPopover',
